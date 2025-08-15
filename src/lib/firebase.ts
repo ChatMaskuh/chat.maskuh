@@ -3,13 +3,12 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  "projectId": "new-prototype-pzcbz",
-  "appId": "1:761462500863:web:8a1acdcd28a8f6de3c0bca",
-  "storageBucket": "new-prototype-pzcbz.firebasestorage.app",
-  "apiKey": "AIzaSyBBM1V_DP6jbAwJrB4rkxTRC_Cz-8ihpPc",
-  "authDomain": "new-prototype-pzcbz.firebaseapp.com",
-  "measurementId": "",
-  "messagingSenderId": "761462500863"
+  "projectId": "marketplacedashboard-21952",
+  "appId": "1:637998853383:web:b1d3d5203531b739fa4219",
+  "storageBucket": "marketplacedashboard-21952.appspot.com",
+  "apiKey": "AIzaSyDSlqTj_94AIHImrjF4XvoqUnmmkYy40ac",
+  "authDomain": "marketplacedashboard-21952.firebaseapp.com",
+  "messagingSenderId": "637998853383"
 };
 
 // Initialize Firebase
