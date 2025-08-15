@@ -5,6 +5,7 @@ import { ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import type { Chart } from 'chart.js';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 interface BacklogProps {
   backlogData: any[];
@@ -105,7 +106,7 @@ export function Backlog({
       </div>
       {isOpen && (
         <div id="backlog-content" className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="overflow-x-auto">
+          <ScrollArea>
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
               <thead className="bg-gray-50 dark:bg-gray-700">
                 <tr>
@@ -124,7 +125,8 @@ export function Backlog({
                 ))}
               </tbody>
             </table>
-          </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
           <div className="mt-8 h-80">
             <div className="flex items-center justify-between mb-4">
               <h3 id="backlog-chart-title" className="text-lg font-medium text-gray-800 dark:text-gray-300">
