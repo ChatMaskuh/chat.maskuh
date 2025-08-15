@@ -5,7 +5,7 @@ import { useDashboardState } from '@/hooks/use-dashboard-state';
 import { DashboardHeader } from './header';
 import { SummaryMetrics } from './summary-metrics';
 import { ManpowerPerformance } from './manpower-performance';
-import { Backlog } } from './backlog';
+import { Backlog } from './backlog';
 import { WorkflowSection } from './workflow-section';
 
 export function Dashboard() {
