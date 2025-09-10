@@ -40,7 +40,7 @@ export function Backlog({
         
         // Check header, assume first line is header
         const header = lines[0].split(',').map(h => h.trim().toLowerCase());
-        const expectedHeaders = ['store name', 'payment accepted', 'marketplace', 'platform'];
+        const expectedHeaders = ['store name', 'payment accepted', 'platform'];
         
         // Basic header validation
         if (header.length < expectedHeaders.length) {
@@ -50,12 +50,11 @@ export function Backlog({
 
         lines.slice(1).forEach(line => {
             const parts = line.split(',');
-            if (parts.length >= 4) {
+            if (parts.length >= 3) {
                 newBacklogData.push({
                     storeName: parts[0].trim(),
-                    paymentAccepted: (parts[1].trim() && !isNaN(parseInt(parts[1].trim(), 10))) ? parts[1].trim() : "0", 
-                    marketplace: parts[2].trim(),
-                    platform: parts[3].trim()
+                    paymentAccepted: (parts[1].trim() && !isNaN(parseInt(parts[1].trim(), 10))) ? parts[1].trim() : "0",
+                    platform: parts[2].trim()
                 });
             }
         });
@@ -79,10 +78,10 @@ export function Backlog({
       return;
     }
     const filename = 'backlog_data.csv';
-    const headers = ['STORE NAME', 'PAYMENT ACCEPTED', 'MARKETPLACE', 'PLATFORM'];
+    const headers = ['STORE NAME', 'PAYMENT ACCEPTED', 'PLATFORM'];
     let csvContent = headers.join(',') + '\n';
     backlogData.forEach(item => {
-        csvContent += `${item.storeName},${item.paymentAccepted},${item.marketplace},${item.platform}\n`;
+        csvContent += `${item.storeName},${item.paymentAccepted},${item.platform}\n`;
     });
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -146,7 +145,6 @@ export function Backlog({
                   <tr>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-blue-400 uppercase tracking-wider">Store Name</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-blue-400 uppercase tracking-wider">Payment Accepted</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-blue-400 uppercase tracking-wider">Marketplace</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-blue-400 uppercase tracking-wider">Platform</th>
                   </tr>
                 </thead>
@@ -156,13 +154,12 @@ export function Backlog({
                       <tr key={index}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{item.storeName}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{item.paymentAccepted}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{item.marketplace}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{item.platform}</td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={4} className="px-6 py-10 text-center text-sm text-gray-500">
+                      <td colSpan={3} className="px-6 py-10 text-center text-sm text-gray-500">
                         No backlog data. Please upload a CSV.
                       </td>
                     </tr>
