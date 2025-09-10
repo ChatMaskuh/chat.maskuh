@@ -34,7 +34,7 @@ const PerformanceCard = ({ title, value, icon, id }: { title: string, value: str
 }
 
 export function ManpowerPerformance({ summary, onManpowerChange }: ManpowerPerformanceProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
     <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg transition-colors duration-300 mb-4">

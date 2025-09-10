@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState, useRef } from 'react';
-import { ChevronDown, Upload, Download, Pencil } from 'lucide-react';
+import { ChevronDown, Upload, Download, Pencil, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { Input } from '@/components/ui/input';
 
 interface BacklogProps {
   backlogData: any[];
@@ -19,6 +20,7 @@ export function Backlog({
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [activeTab, setActiveTab] = useState<'all' | 'detail'>('all');
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleUploadClick = () => {
     fileInputRef.current?.click();
@@ -38,23 +40,23 @@ export function Backlog({
         const lines = csvData.split('\n').filter(line => line.trim() !== '');
         const newBacklogData: any[] = [];
         
-        // Check header, assume first line is header
         const header = lines[0].split(',').map(h => h.trim().toLowerCase());
-        const expectedHeaders = ['store name', 'payment accepted', 'platform'];
+        const expectedHeaders = ['store name', 'payment accepted'];
         
-        // Basic header validation
-        if (header.length < expectedHeaders.length) {
-            toast({ title: 'Invalid CSV format', description: 'Missing required columns.', variant: 'destructive'});
+        if (header.length < expectedHeaders.length || !header.includes('store name') || !header.includes('payment accepted')) {
+            toast({ title: 'Invalid CSV format', description: 'Missing required columns: "store name", "payment accepted".', variant: 'destructive'});
             return;
         }
 
+        const storeNameIndex = header.indexOf('store name');
+        const paymentAcceptedIndex = header.indexOf('payment accepted');
+
         lines.slice(1).forEach(line => {
             const parts = line.split(',');
-            if (parts.length >= 3) {
+            if (parts.length >= 2) {
                 newBacklogData.push({
-                    storeName: parts[0].trim(),
-                    paymentAccepted: (parts[1].trim() && !isNaN(parseInt(parts[1].trim(), 10))) ? parts[1].trim() : "0",
-                    platform: parts[2].trim()
+                    storeName: parts[storeNameIndex]?.trim() ?? '',
+                    paymentAccepted: (parts[paymentAcceptedIndex]?.trim() && !isNaN(parseInt(parts[paymentAcceptedIndex].trim(), 10))) ? parts[paymentAcceptedIndex].trim() : "0",
                 });
             }
         });
@@ -78,10 +80,10 @@ export function Backlog({
       return;
     }
     const filename = 'backlog_data.csv';
-    const headers = ['STORE NAME', 'PAYMENT ACCEPTED', 'PLATFORM'];
+    const headers = ['STORE NAME', 'PAYMENT ACCEPTED'];
     let csvContent = headers.join(',') + '\n';
     backlogData.forEach(item => {
-        csvContent += `${item.storeName},${item.paymentAccepted},${item.platform}\n`;
+        csvContent += `${item.storeName},${item.paymentAccepted}\n`;
     });
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -93,6 +95,16 @@ export function Backlog({
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+  
+  const handleEditChange = (index: number, field: string, value: string) => {
+    const updatedData = [...backlogData];
+    updatedData[index] = { ...updatedData[index], [field]: value };
+    setBacklogData(updatedData);
+  };
+
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
   };
 
   return (
@@ -125,8 +137,9 @@ export function Backlog({
                 </Button>
             </div>
             <div className="flex items-center space-x-2">
-                <Button size="sm" variant="outline" className="bg-yellow-400 text-black hover:bg-yellow-500">
-                    <Pencil className="mr-2 h-4 w-4" /> Edit
+                <Button onClick={toggleEdit} size="sm" variant="outline" className="bg-yellow-400 text-black hover:bg-yellow-500">
+                    {isEditing ? <Save className="mr-2 h-4 w-4" /> : <Pencil className="mr-2 h-4 w-4" />}
+                    {isEditing ? 'Save' : 'Edit'}
                 </Button>
                 <Button onClick={handleUploadClick} size="sm" variant="outline" className="bg-blue-500 text-white hover:bg-blue-600">
                     <Upload className="mr-2 h-4 w-4" /> Upload
@@ -145,21 +158,42 @@ export function Backlog({
                   <tr>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-blue-400 uppercase tracking-wider">Store Name</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-blue-400 uppercase tracking-wider">Payment Accepted</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-blue-400 uppercase tracking-wider">Platform</th>
                   </tr>
                 </thead>
                 <tbody id="backlog-table-body" className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                   {backlogData.length > 0 ? (
                     backlogData.map((item, index) => (
                       <tr key={index}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{item.storeName}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{item.paymentAccepted}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{item.platform}</td>
+                        {isEditing ? (
+                          <>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <Input
+                                type="text"
+                                value={item.storeName}
+                                onChange={(e) => handleEditChange(index, 'storeName', e.target.value)}
+                                className="dark:bg-gray-700"
+                              />
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <Input
+                                type="number"
+                                value={item.paymentAccepted}
+                                onChange={(e) => handleEditChange(index, 'paymentAccepted', e.target.value)}
+                                className="dark:bg-gray-700"
+                              />
+                            </td>
+                          </>
+                        ) : (
+                          <>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{item.storeName}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{item.paymentAccepted}</td>
+                          </>
+                        )}
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={3} className="px-6 py-10 text-center text-sm text-gray-500">
+                      <td colSpan={2} className="px-6 py-10 text-center text-sm text-gray-500">
                         No backlog data. Please upload a CSV.
                       </td>
                     </tr>
