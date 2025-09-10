@@ -38,9 +38,6 @@ export function useDashboardState() {
   const [packerCount, setPackerCount] = useState(0);
   const [dispatcherCount, setDispatcherCount] = useState(0);
 
-  const [currentBacklogFilter, setCurrentBacklogFilter] = useState<'platform' | 'source'>('platform');
-  const [currentBacklogDataMode, setCurrentBacklogDataMode] = useState<'count' | 'payment'>('count');
-
   const [summary, setSummary] = useState<DashboardSummary>({
     totalPickOrder: 0, totalPacked: 0, totalShipped: 0, payment: 0, inProgress: 0,
     averagePickPerHour: '0', averagePackPerHour: '0', averageShippedPerHour: '0',
@@ -64,7 +61,7 @@ export function useDashboardState() {
     const totalPickOrder = pickData.reduce((sum, value) => sum + (value || 0), 0);
     const totalPackOrder = packData.reduce((sum, value) => sum + (value || 0), 0);
     const totalShippedOrder = shippedData.reduce((sum, value) => sum + (value || 0), 0);
-    const paymentOrders = backlogData.reduce((sum, item) => sum + (parseInt(item.payment_order, 10) || 0), 0);
+    const paymentOrders = backlogData.reduce((sum, item) => sum + (parseInt(item.paymentAccepted, 10) || 0), 0);
 
     const nonZeroPickValues = pickData.filter(v => v > 0);
     const nonZeroPackValues = packData.filter(v => v > 0);
@@ -160,50 +157,11 @@ export function useDashboardState() {
     renderChart('shipped-chart', shippedChartInstance, hours, shippedData, 'Jumlah Order Shipped', '#10b981');
   }, [pickData, packData, shippedData, renderChart]);
   
-  const renderBacklogChart = useCallback(() => {
-    let backlogLabels: string[] = [];
-    let backlogValues: number[] = [];
-    let chartLabel = '';
-    
-    const dataToFilter = currentBacklogFilter;
-    const groupedData: { [key: string]: number } = {};
-
-    if (currentBacklogDataMode === 'count') {
-        backlogData.forEach(item => {
-            const key = item[dataToFilter];
-            const normalizedKey = key.toLowerCase().startsWith('shopee') || key.toLowerCase().startsWith('shoope') ? 'Shopee' : key.split(' ')[0];
-            groupedData[normalizedKey] = (groupedData[normalizedKey] || 0) + 1;
-        });
-        backlogLabels = Object.keys(groupedData);
-        backlogValues = Object.values(groupedData);
-        chartLabel = 'Count of Store';
-    } else if (currentBacklogDataMode === 'payment') {
-        backlogData.forEach(item => {
-            const key = item[dataToFilter];
-            const normalizedKey = key.toLowerCase().startsWith('shopee') || key.toLowerCase().startsWith('shoope') ? 'Shopee' : key.split(' ')[0];
-            groupedData[normalizedKey] = (groupedData[normalizedKey] || 0) + (parseInt(item.payment_order, 10) || 0);
-        });
-        backlogLabels = Object.keys(groupedData);
-        backlogValues = Object.values(groupedData);
-        chartLabel = 'Total Payment Orders';
-    }
-    
-    renderChart(
-      'backlog-chart', 
-      backlogChartInstance, 
-      backlogLabels, 
-      backlogValues, 
-      chartLabel,
-      ['#8884d8', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#60a5fa', '#34d399', '#7f1d1d', '#5b21b6', '#065f46', '#e11d48']
-    );
-
-  }, [backlogData, currentBacklogFilter, currentBacklogDataMode, renderChart]);
 
   useEffect(() => {
     updateSummary();
     renderWorkflowCharts();
-    renderBacklogChart();
-  }, [updateSummary, renderWorkflowCharts, renderBacklogChart]);
+  }, [updateSummary, renderWorkflowCharts, backlogData]);
 
   return {
     pickData, setPickData,
@@ -212,8 +170,6 @@ export function useDashboardState() {
     backlogData, setBacklogData,
     summary,
     handleManpowerChange,
-    currentBacklogFilter, setCurrentBacklogFilter,
-    currentBacklogDataMode, setCurrentBacklogDataMode,
     pickChartInstance,
     packChartInstance,
     shippedChartInstance,

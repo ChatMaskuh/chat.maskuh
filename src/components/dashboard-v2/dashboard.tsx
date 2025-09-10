@@ -27,11 +27,6 @@ export function Dashboard() {
       <Backlog
         backlogData={state.backlogData}
         setBacklogData={state.setBacklogData}
-        currentBacklogFilter={state.currentBacklogFilter}
-        setCurrentBacklogFilter={state.setCurrentBacklogFilter}
-        currentBacklogDataMode={state.currentBacklogDataMode}
-        setCurrentBacklogDataMode={state.setCurrentBacklogDataMode}
-        backlogChartInstance={state.backlogChartInstance}
       />
       <WorkflowSection
         type="pick"
