@@ -6,6 +6,13 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface BacklogProps {
   backlogData: any[];
@@ -21,6 +28,8 @@ export function Backlog({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [activeTab, setActiveTab] = useState<'all' | 'detail'>('all');
   const [isEditing, setIsEditing] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleUploadClick = () => {
     fileInputRef.current?.click();
@@ -98,14 +107,27 @@ export function Backlog({
   };
   
   const handleEditChange = (index: number, field: string, value: string) => {
+    const originalIndex = (currentPage - 1) * rowsPerPage + index;
     const updatedData = [...backlogData];
-    updatedData[index] = { ...updatedData[index], [field]: value };
+    updatedData[originalIndex] = { ...updatedData[originalIndex], [field]: value };
     setBacklogData(updatedData);
   };
 
   const toggleEdit = () => {
     setIsEditing(!isEditing);
   };
+
+  const totalPages = Math.ceil(backlogData.length / rowsPerPage);
+  const paginatedData = backlogData.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
+
+  const handleRowsPerPageChange = (value: string) => {
+    setRowsPerPage(parseInt(value, 10));
+    setCurrentPage(1); 
+  };
+
 
   return (
     <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg transition-colors duration-300 mb-4">
@@ -161,8 +183,8 @@ export function Backlog({
                   </tr>
                 </thead>
                 <tbody id="backlog-table-body" className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                  {backlogData.length > 0 ? (
-                    backlogData.map((item, index) => (
+                  {paginatedData.length > 0 ? (
+                    paginatedData.map((item, index) => (
                       <tr key={index}>
                         {isEditing ? (
                           <>
@@ -203,6 +225,44 @@ export function Backlog({
             </div>
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
+           <div className="flex items-center justify-between mt-4">
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-700 dark:text-gray-300">Rows per page:</span>
+                <Select value={rowsPerPage.toString()} onValueChange={handleRowsPerPageChange}>
+                  <SelectTrigger className="w-20">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="3">3</SelectItem>
+                    <SelectItem value="5">5</SelectItem>
+                    <SelectItem value="10">10</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex items-center space-x-4">
+                  <span className="text-sm text-gray-700 dark:text-gray-300">
+                      Page {currentPage} of {totalPages}
+                  </span>
+                  <div className="flex items-center space-x-2">
+                      <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                          disabled={currentPage === 1}
+                      >
+                          Previous
+                      </Button>
+                      <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                          disabled={currentPage === totalPages}
+                      >
+                          Next
+                      </Button>
+                  </div>
+              </div>
+          </div>
         </div>
       )}
     </div>
