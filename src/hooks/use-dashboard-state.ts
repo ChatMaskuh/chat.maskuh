@@ -9,7 +9,27 @@ Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip, L
 
 const hours = generateHours();
 
-const initialBacklogData: any[] = [];
+const initialBacklogData: any[] = [
+    { storeName: 'Edit by Sociolla', paymentAccepted: '0' },
+    { storeName: 'Jung Saem Mool Official Store', paymentAccepted: '0' },
+    { storeName: 'COSRX Official Store', paymentAccepted: '0' },
+    { storeName: 'Derma Angel Official Store', paymentAccepted: '0' },
+    { storeName: 'Round Lab Official Store', paymentAccepted: '0' },
+    { storeName: 'Amuse Official Store', paymentAccepted: '0' },
+    { storeName: 'Dr G Official Store', paymentAccepted: '0' },
+    { storeName: 'Speak to me Official Store', paymentAccepted: '0' },
+    { storeName: 'Lilla Official store', paymentAccepted: '0' },
+    { storeName: 'Sukin Official Store', paymentAccepted: '0' },
+    { storeName: 'Im From Official Store', paymentAccepted: '0' },
+    { storeName: 'Mediheal Official Store', paymentAccepted: '0' },
+    { storeName: 'UIQ Official Store', paymentAccepted: '0' },
+    { storeName: 'On Sale', paymentAccepted: '0' },
+    { storeName: 'Carasun.id Official Store', paymentAccepted: '0' },
+    { storeName: 'Ariul Official Store', paymentAccepted: '0' },
+    { storeName: 'Espoir Official Store', paymentAccepted: '0' },
+    { storeName: 'Lilla Baby Indonesia', paymentAccepted: '0' },
+    { storeName: 'UB Mom Indonesia', paymentAccepted: '0' },
+];
 
 export interface DashboardSummary {
     totalPickOrder: number;
