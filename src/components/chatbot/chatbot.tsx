@@ -18,14 +18,13 @@ export function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const scrollAreaViewportRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    if (scrollAreaRef.current) {
+    if (scrollAreaViewportRef.current) {
         setTimeout(() => {
-            const viewport = scrollAreaRef.current?.querySelector('div[data-radix-scroll-area-viewport]');
-            if (viewport) {
-                viewport.scrollTop = viewport.scrollHeight;
+            if (scrollAreaViewportRef.current) {
+                scrollAreaViewportRef.current.scrollTop = scrollAreaViewportRef.current.scrollHeight;
             }
         }, 100);
     }
@@ -80,52 +79,54 @@ export function Chatbot() {
         </h2>
       </div>
 
-      <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
-        <div className="space-y-4">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={`flex items-end gap-2 ${
-                message.sender === "user" ? "justify-end" : ""
-              }`}
-            >
-              {message.sender === "bot" && (
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback>
-                    <Bot />
-                  </AvatarFallback>
-                </Avatar>
-              )}
-              <div
-                className={`max-w-xs md:max-w-md lg:max-w-lg rounded-lg px-4 py-2 ${
-                  message.sender === "user"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted"
+      <ScrollArea className="flex-1 p-4">
+        <div ref={scrollAreaViewportRef} className="h-full">
+            <div className="space-y-4">
+            {messages.map((message) => (
+                <div
+                key={message.id}
+                className={`flex items-end gap-2 ${
+                    message.sender === "user" ? "justify-end" : ""
                 }`}
-              >
-                <p className="text-sm">{message.text}</p>
-              </div>
-              {message.sender === "user" && (
-                 <Avatar className="h-8 w-8">
+                >
+                {message.sender === "bot" && (
+                    <Avatar className="h-8 w-8">
                     <AvatarFallback>
-                        <User />
+                        <Bot />
                     </AvatarFallback>
-                </Avatar>
-              )}
+                    </Avatar>
+                )}
+                <div
+                    className={`max-w-xs md:max-w-md lg:max-w-lg rounded-lg px-4 py-2 ${
+                    message.sender === "user"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted"
+                    }`}
+                >
+                    <p className="text-sm">{message.text}</p>
+                </div>
+                {message.sender === "user" && (
+                    <Avatar className="h-8 w-8">
+                        <AvatarFallback>
+                            <User />
+                        </AvatarFallback>
+                    </Avatar>
+                )}
+                </div>
+            ))}
+            {isLoading && (
+                <div className="flex items-end gap-2">
+                <Avatar className="h-8 w-8">
+                    <AvatarFallback>
+                        <Bot />
+                    </AvatarFallback>
+                    </Avatar>
+                <div className="max-w-xs md:max-w-md lg:max-w-lg rounded-lg px-4 py-2 bg-muted">
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                </div>
+                </div>
+            )}
             </div>
-          ))}
-          {isLoading && (
-            <div className="flex items-end gap-2">
-               <Avatar className="h-8 w-8">
-                  <AvatarFallback>
-                    <Bot />
-                  </AvatarFallback>
-                </Avatar>
-              <div className="max-w-xs md:max-w-md lg:max-w-lg rounded-lg px-4 py-2 bg-muted">
-                <Loader2 className="h-5 w-5 animate-spin" />
-              </div>
-            </div>
-          )}
         </div>
       </ScrollArea>
 
