@@ -1,11 +1,9 @@
-import { Dashboard } from '@/components/dashboard-v2/dashboard';
+import { Chatbot } from '@/components/chatbot/chatbot';
 
 export default function Home() {
   return (
-    <main className="p-4 overflow-y-auto">
-      <div className="w-full space-y-8 max-w-full mx-auto">
-        <Dashboard />
-      </div>
+    <main className="flex h-screen bg-gray-100 dark:bg-gray-900">
+      <Chatbot />
     </main>
   );
 }
