@@ -24,7 +24,7 @@ const chatFlow = ai.defineFlow(
   async (message) => {
     const llmResponse = await ai.generate({
       prompt: `You are a helpful assistant. Respond to the following message: ${message}`,
-      model: 'googleai/gemini-2.0-flash',
+      model: 'openai/gpt-4o-mini',
     });
 
     return llmResponse.text;
