@@ -77,9 +77,12 @@ export function Chatbot() {
           <AvatarImage src="https://cdn-icons-png.flaticon.com/128/3273/3273828.png" alt="Chat.Maskuh" />
           <AvatarFallback>CM</AvatarFallback>
         </Avatar>
-        <h2 className="text-xl font-semibold">
-            Chat.Maskuh
-        </h2>
+        <div>
+          <h2 className="text-xl font-semibold">
+              Chat.Maskuh
+          </h2>
+          <p className="text-xs text-muted-foreground">Powered by Arlan Saputra</p>
+        </div>
       </div>
 
       <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
