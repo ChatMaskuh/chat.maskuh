@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Send, BotMessageSquare, UserRound, Loader2 } from "lucide-react";
+import { Send, UserRound, Loader2 } from "lucide-react";
 import { chat } from "@/ai/flows/chatbot";
 
 interface Message {
@@ -74,9 +75,8 @@ export function Chatbot() {
     <div className="flex flex-col w-full max-w-2xl mx-auto h-full bg-white dark:bg-gray-800 shadow-2xl rounded-lg">
       <div className="p-4 border-b dark:border-gray-700 flex items-center gap-3">
         <Avatar>
-          <AvatarFallback>
-            <BotMessageSquare />
-          </AvatarFallback>
+          <AvatarImage src="/bot-icon.png" alt="Chat.Maskuh" />
+          <AvatarFallback>CM</AvatarFallback>
         </Avatar>
         <h2 className="text-xl font-semibold">
             Chat.Maskuh
@@ -94,9 +94,8 @@ export function Chatbot() {
             >
             {message.sender === "bot" && (
                 <Avatar className="h-8 w-8">
-                <AvatarFallback>
-                    <BotMessageSquare />
-                </AvatarFallback>
+                  <AvatarImage src="/bot-icon.png" alt="Chat.Maskuh" />
+                  <AvatarFallback>CM</AvatarFallback>
                 </Avatar>
             )}
             <div
@@ -120,10 +119,9 @@ export function Chatbot() {
         {isLoading && (
             <div className="flex items-end gap-2">
             <Avatar className="h-8 w-8">
-                <AvatarFallback>
-                    <BotMessageSquare />
-                </AvatarFallback>
-                </Avatar>
+              <AvatarImage src="/bot-icon.png" alt="Chat.Maskuh" />
+              <AvatarFallback>CM</AvatarFallback>
+            </Avatar>
             <div className="max-w-xs md:max-w-md lg:max-w-lg rounded-lg px-4 py-2 bg-muted">
                 <Loader2 className="h-5 w-5 animate-spin" />
             </div>
