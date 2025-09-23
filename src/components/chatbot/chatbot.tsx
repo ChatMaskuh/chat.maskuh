@@ -35,6 +35,102 @@ export function Chatbot() {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const documentationContent: Record<string, DocContent> = {
+    // Maskuh Learning Content
+    'learning-getting-started': {
+      title: 'Getting Started',
+      icon: <GraduationCap className="h-6 w-6" />,
+      content: (
+        <div className="space-y-4 text-sm">
+          <p>Selamat datang di Chat.Maskuh! Ini adalah asisten AI yang dirancang untuk membantu Anda dalam berbagai tugas. Anda dapat berinteraksi dengannya layaknya mengobrol dengan teman.</p>
+          <div className="p-3 bg-muted rounded-lg">
+            <h4 className="font-semibold mb-2">Cara Memulai:</h4>
+            <ul className="list-disc list-inside space-y-2">
+              <li><span className="font-semibold">Ketik Pertanyaan:</span> Cukup ketik pesan atau pertanyaan Anda di kolom input di bagian bawah dan tekan Enter atau klik tombol kirim.</li>
+              <li><span className="font-semibold">Tunggu Jawaban:</span> Chat.Maskuh akan memproses permintaan Anda dan memberikan respons dalam sekejap.</li>
+              <li><span className="font-semibold">Jelajahi Personanya:</span> Coba ajukan pertanyaan matematika, sejarah, atau sekadar sapaan santai untuk melihat bagaimana ia merespons dengan persona yang berbeda.</li>
+            </ul>
+          </div>
+          <p className="text-xs text-muted-foreground">Eksperimen adalah kunci! Jangan ragu untuk mencoba berbagai jenis pertanyaan.</p>
+        </div>
+      ),
+    },
+     'learning-basic-concepts': {
+      title: 'Basic Concepts',
+      icon: <FileQuestion className="h-6 w-6" />,
+      content: (
+        <div className="space-y-4 text-sm">
+          <p>Chat.Maskuh dibangun di atas beberapa teknologi modern. Memahami konsep dasarnya akan membantu Anda mengapresiasi cara kerjanya.</p>
+          <div className="space-y-3">
+            <div className="flex items-start gap-3">
+              <Code className="h-5 w-5 mt-0.5 text-primary shrink-0" />
+              <div>
+                <h4 className="font-semibold">Genkit Flow</h4>
+                <p className="text-muted-foreground">Inti dari chatbot ini. Sebuah *flow* adalah serangkaian langkah yang dijalankan di server. Saat Anda mengirim pesan, Anda sebenarnya memanggil sebuah *flow* yang memproses pesan Anda dan menghasilkan respons dari model AI.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <ComponentIcon className="h-5 w-5 mt-0.5 text-primary shrink-0" />
+              <div>
+                <h4 className="font-semibold">Prompt Engineering</h4>
+                <p className="text-muted-foreground">Ini adalah seni merancang instruksi (prompt) untuk model AI. Prompt di `chatbot.ts` dirancang sedemikian rupa agar Chat.Maskuh memiliki persona yang unik dan dapat beralih peran sesuai konteks pertanyaan.</p>
+              </div>
+            </div>
+             <div className="flex items-start gap-3">
+              <Package className="h-5 w-5 mt-0.5 text-primary shrink-0" />
+              <div>
+                <h4 className="font-semibold">Server Actions (Next.js)</h4>
+                <p className="text-muted-foreground">Aplikasi ini tidak memerlukan API Route tradisional. Fungsi `chat()` diekspor sebagai Server Action, memungkinkan komponen di sisi klien (`'use client'`) memanggil fungsi di sisi server secara langsung dan aman.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    'learning-tutorials': {
+      title: 'Tutorials',
+      icon: <Video className="h-6 w-6" />,
+      content: (
+        <div className="space-y-4 text-sm text-center">
+          <Video className="h-16 w-16 mx-auto text-muted-foreground" />
+          <h4 className="font-semibold">Segera Hadir!</h4>
+          <p>Bagian ini akan berisi video tutorial langkah-demi-langkah tentang cara membangun, memodifikasi, dan memperluas fungsionalitas Chat.Maskuh.</p>
+          <p className="text-xs text-muted-foreground">Nantikan pembaruan di masa mendatang.</p>
+        </div>
+      ),
+    },
+    'learning-case-studies': {
+      title: 'Case Studies',
+      icon: <BookOpen className="h-6 w-6" />,
+      content: (
+        <div className="space-y-4 text-sm">
+          <p>Chatbot seperti Chat.Maskuh memiliki banyak penerapan di dunia nyata. Berikut beberapa contoh kasus penggunaannya:</p>
+          <ul className="list-disc list-inside space-y-3">
+            <li><span className="font-semibold">Customer Service Otomatis:</span> Menjawab pertanyaan umum pelanggan 24/7, mengurangi beban tim support.</li>
+            <li><span className="font-semibold">Asisten Pengembang:</span> Membantu developer dengan menjawab pertanyaan tentang kode, dokumentasi API, atau memberikan cuplikan kode.</li>
+            <li><span className="font-semibold">Alat Edukasi Interaktif:</span> Menjadi tutor virtual yang dapat menjelaskan konsep-konsep kompleks dengan cara yang mudah dipahami.</li>
+            <li><span className="font-semibold">Onboarding Karyawan Baru:</span> Memberikan informasi tentang perusahaan, kebijakan, dan tugas-tugas awal kepada karyawan baru.</li>
+          </ul>
+        </div>
+      ),
+    },
+    'learning-tips-tricks': {
+      title: 'Tips & Tricks',
+      icon: <Star className="h-6 w-6" />,
+      content: (
+        <div className="space-y-4 text-sm">
+          <p>Maksimalkan pengalaman Anda dengan Chat.Maskuh menggunakan tips berikut:</p>
+           <div className="p-3 bg-muted rounded-lg">
+            <ul className="list-disc list-inside space-y-2">
+              <li><span className="font-semibold">Jadilah Spesifik:</span> Semakin detail pertanyaan Anda, semakin akurat jawaban yang akan Anda dapatkan. Contoh: "Berapa hasil dari 15 dikali 24?" lebih baik daripada "Tolong hitung".</li>
+              <li><span className="font-semibold">Berikan Konteks:</span> Jika pertanyaan Anda adalah lanjutan dari obrolan sebelumnya, coba ulangi sedikit konteksnya agar AI tidak bingung.</li>
+              <li><span className="font-semibold">Gunakan Persona:</span> Jangan ragu untuk meminta AI bertindak sebagai seseorang. Contoh: "Jelaskan fotosintesis seolah-olah saya anak SD".</li>
+              <li><span className="font-semibold">Periksa Fakta Penting:</span> Meskipun cerdas, AI bisa membuat kesalahan. Untuk informasi yang sangat krusial (seperti data sejarah), selalu baik untuk melakukan verifikasi silang.</li>
+            </ul>
+          </div>
+        </div>
+      ),
+    },
+    // Maskuh Documentation Content
     'app-menu': {
       title: 'APP MENU',
       icon: <Menu className="h-6 w-6" />,
@@ -232,23 +328,23 @@ export function Chatbot() {
               <AccordionContent>
                 <Card>
                   <CardContent className="p-4 space-y-4">
-                    <div className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                    <div onClick={() => setActiveDialog('learning-getting-started')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
                       <GraduationCap className="h-5 w-5 text-muted-foreground" />
                       <span className="text-sm">Getting Started</span>
                     </div>
-                    <div className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                    <div onClick={() => setActiveDialog('learning-basic-concepts')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
                       <FileQuestion className="h-5 w-5 text-muted-foreground" />
                       <span className="text-sm">Basic Concepts</span>
                     </div>
-                    <div className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                    <div onClick={() => setActiveDialog('learning-tutorials')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
                       <Video className="h-5 w-5 text-muted-foreground" />
                       <span className="text-sm">Tutorials</span>
                     </div>
-                    <div className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                    <div onClick={() => setActiveDialog('learning-case-studies')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
                       <BookOpen className="h-5 w-5 text-muted-foreground" />
                       <span className="text-sm">Case Studies</span>
                     </div>
-                    <div className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                    <div onClick={() => setActiveDialog('learning-tips-tricks')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
                       <Star className="h-5 w-5 text-muted-foreground" />
                       <span className="text-sm">Tips & Tricks</span>
                     </div>
@@ -384,3 +480,5 @@ export function Chatbot() {
     </div>
   );
 }
+
+    
