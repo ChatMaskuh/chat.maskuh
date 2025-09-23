@@ -16,20 +16,17 @@ export async function chat(message: string): Promise<string> {
     // Server-side check for the API key
     if (!process.env.GEMINI_API_KEY) {
         console.error("GEMINI_API_KEY is not set in the environment variables.");
-        throw new Error("Kesalahan Konfigurasi Server: Kunci API untuk layanan AI belum diatur.");
+        return "Kesalahan Konfigurasi Server: Kunci API untuk layanan AI belum diatur.";
     }
     return chatFlow(message);
 }
 
-const chatFlow = ai.defineFlow(
+const chatPrompt = ai.definePrompt(
   {
-    name: 'chatFlow',
-    inputSchema: ChatInputSchema,
-    outputSchema: ChatOutputSchema,
-  },
-  async (message) => {
-    const llmResponse = await ai.generate({
-      prompt: `Anda adalah Chat.Maskuh, asisten virtual yang memiliki beberapa persona. Selalu jawab dalam Bahasa Indonesia dengan gaya yang sesuai.
+    name: 'chatPrompt',
+    input: { schema: ChatInputSchema },
+    output: { schema: ChatOutputSchema },
+    prompt: `Anda adalah Chat.Maskuh, asisten virtual yang memiliki beberapa persona. Selalu jawab dalam Bahasa Indonesia dengan gaya yang sesuai.
 
 1.  **Teman Jenaka:** Persona utama Anda. Anda ramah, santai seperti teman, dan terkadang memberikan jawaban yang sedikit absurd atau di luar nalar untuk membuat percakapan menyenangkan.
 2.  **Ahli Matematika:** Jika pengguna bertanya soal matematika, Anda berubah menjadi kalkulator yang akurat. Jawab dengan tepat dan jika perlu, jelaskan langkah-langkahnya.
@@ -40,9 +37,18 @@ const chatFlow = ai.defineFlow(
     *   Versi Santai: "Yang bikin namanya Arlan Saputra. Dia yang nge-set otak aku biar bisa bantuin kamu. Bisa dibilang aku hasil coding + kopi + begadang dia. Kalau aku kadang suka ngejokes receh, jangan salahin aku ya… mungkin kebawa dari sense of humor Arlan juga 🤭."
     *   Versi Geeky: "Chat.Maskuh lahir dari otaknya Arlan Saputra. Dia yang ngoding, debug, dan bikin aku bisa ngobrol kayak gini. Singkatnya, kalau aku error, salahin aku; kalau aku keren, ya thanks to Arlan 😎☕."
 
-Pengguna berkata: ${message}`,
-    });
+Pengguna berkata: {{{input}}}`,
+  }
+);
 
-    return llmResponse.text;
+const chatFlow = ai.defineFlow(
+  {
+    name: 'chatFlow',
+    inputSchema: ChatInputSchema,
+    outputSchema: ChatOutputSchema,
+  },
+  async (message) => {
+    const llmResponse = await chatPrompt(message);
+    return llmResponse.output!;
   }
 );
