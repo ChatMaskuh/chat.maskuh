@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "Chat.Maskuh",
   description: "A friendly chatbot to assist you.",
   icons: {
-    icon: 'https://cdn-icons-png.flaticon.com/512/993/993733.png',
+    icon: 'https://cdn-icons-png.flaticon.com/512/13530/13530132.png',
   },
 };
 
