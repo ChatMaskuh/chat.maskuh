@@ -5,7 +5,7 @@
  * - chat - A function that takes a user's message and returns a response.
  */
 
-import { ai } from '@/ai/genkit';
+import { ai } from '@/ai/dev';
 import { z } from 'zod';
 
 const ChatInputSchema = z.string();
