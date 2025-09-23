@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Send, Bot, User, Loader2 } from "lucide-react";
+import { Send, BotMessageSquare, UserRound, Loader2 } from "lucide-react";
 import { chat } from "@/ai/flows/chatbot";
 
 interface Message {
@@ -75,7 +75,7 @@ export function Chatbot() {
       <div className="p-4 border-b dark:border-gray-700 flex items-center gap-3">
         <Avatar>
           <AvatarFallback>
-            <Bot />
+            <BotMessageSquare />
           </AvatarFallback>
         </Avatar>
         <h2 className="text-xl font-semibold">
@@ -95,7 +95,7 @@ export function Chatbot() {
             {message.sender === "bot" && (
                 <Avatar className="h-8 w-8">
                 <AvatarFallback>
-                    <Bot />
+                    <BotMessageSquare />
                 </AvatarFallback>
                 </Avatar>
             )}
@@ -111,7 +111,7 @@ export function Chatbot() {
             {message.sender === "user" && (
                 <Avatar className="h-8 w-8">
                     <AvatarFallback>
-                        <User />
+                        <UserRound />
                     </AvatarFallback>
                 </Avatar>
             )}
@@ -121,7 +121,7 @@ export function Chatbot() {
             <div className="flex items-end gap-2">
             <Avatar className="h-8 w-8">
                 <AvatarFallback>
-                    <Bot />
+                    <BotMessageSquare />
                 </AvatarFallback>
                 </Avatar>
             <div className="max-w-xs md:max-w-md lg:max-w-lg rounded-lg px-4 py-2 bg-muted">
