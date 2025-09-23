@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Send, UserRound, Loader2, PanelLeftClose, PanelLeftOpen, Menu, FolderKanban, GitBranch, BookText, Code, FileCode, Package, ComponentIcon, GraduationCap, FileQuestion, Star, Video, BookOpen } from "lucide-react";
+import { Send, UserRound, Loader2, PanelLeftClose, PanelLeftOpen, Menu, FolderKanban, GitBranch, BookText, Code, FileCode, Package, ComponentIcon, GraduationCap, FileQuestion, Star, Video, BookOpen, AlertTriangle } from "lucide-react";
 import { chat } from "@/ai/flows/chatbot";
 import { cn } from "@/lib/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -129,6 +129,16 @@ export function Chatbot() {
               <li><span className="font-semibold">Gunakan Persona:</span> Jangan ragu untuk meminta AI bertindak sebagai seseorang. Contoh: "Jelaskan fotosintesis seolah-olah saya anak SD".</li>
               <li><span className="font-semibold">Periksa Fakta Penting:</span> Meskipun cerdas, AI bisa membuat kesalahan. Untuk informasi yang sangat krusial (seperti data sejarah), selalu baik untuk melakukan verifikasi silang.</li>
             </ul>
+          </div>
+          <div className="p-4 border border-yellow-500/50 bg-yellow-50 dark:bg-yellow-900/10 rounded-lg">
+             <div className="flex items-start gap-3">
+                <AlertTriangle className="h-5 w-5 mt-0.5 text-yellow-600 dark:text-yellow-400 shrink-0" />
+                <div>
+                    <h4 className="font-semibold text-yellow-800 dark:text-yellow-200">Mengatasi Error "Too Many Requests"</h4>
+                    <p className="text-yellow-700 dark:text-yellow-300/90 mt-1">Aplikasi ini menggunakan paket gratis (Free Tier) dari Google Gemini API. Jika Anda mengirim terlalu banyak pesan dalam waktu singkat, Anda mungkin akan melihat pesan error "429 Too Many Requests".</p>
+                    <p className="text-yellow-700 dark:text-yellow-300/90 mt-2"><strong>Solusi:</strong> Cukup tunggu sekitar 15-30 detik sebelum mengirim pesan lagi. Ini akan memberi waktu bagi kuota Anda untuk di-reset.</p>
+                </div>
+            </div>
           </div>
         </div>
       ),
@@ -503,7 +513,3 @@ export function Chatbot() {
     </div>
   );
 }
-
-    
-
-    
