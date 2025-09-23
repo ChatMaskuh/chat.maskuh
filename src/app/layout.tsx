@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const poppins = Poppins({ 
   subsets: ["latin"],
@@ -21,7 +22,9 @@ export default function RootLayout({
   return (
     <html lang="id" suppressHydrationWarning>
       <body className={`${poppins.className} bg-gray-100 dark:bg-gray-900 transition-colors duration-300`}>
-        {children}
+        <SidebarProvider>
+          {children}
+        </SidebarProvider>
         <Toaster />
       </body>
     </html>
