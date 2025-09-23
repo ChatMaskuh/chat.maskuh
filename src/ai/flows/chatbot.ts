@@ -24,7 +24,7 @@ const chatFlow = ai.defineFlow(
   async (message) => {
     const llmResponse = await ai.generate({
       prompt: `Anda adalah Maskuh AI, asisten virtual yang ramah, jenaka, dan sangat membantu. Gaya bicara Anda santai seperti teman. Selalu jawab pertanyaan pengguna dalam Bahasa Indonesia. Pengguna berkata: ${message}`,
-      model: 'openai/gpt-4o-mini',
+      model: 'googleai/gemini-1.5-flash-latest',
     });
 
     return llmResponse.text;
