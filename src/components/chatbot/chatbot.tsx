@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -5,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Send, UserRound, Loader2, BotMessageSquare } from "lucide-react";
+import { Send, UserRound, Loader2, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { chat } from "@/ai/flows/chatbot";
+import { cn } from "@/lib/utils";
 
 interface Message {
   id: string;
@@ -18,6 +20,7 @@ export function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -73,11 +76,16 @@ export function Chatbot() {
   return (
     <div className="flex w-full h-full bg-white dark:bg-gray-800 shadow-2xl rounded-lg overflow-hidden">
       {/* Kolom Sidebar Internal */}
-      <div className="w-1/3 border-r dark:border-gray-700 flex flex-col">
-        <div className="p-4 border-b dark:border-gray-700">
+      <div
+        className={cn(
+          "border-r dark:border-gray-700 flex flex-col transition-all duration-300 ease-in-out",
+          isSidebarOpen ? "w-1/3" : "w-0 p-0 border-none"
+        )}
+      >
+        <div className={cn("p-4 border-b dark:border-gray-700 whitespace-nowrap overflow-hidden", !isSidebarOpen && "hidden")}>
           <h2 className="text-xl font-semibold">Riwayat Obrolan</h2>
         </div>
-        <ScrollArea className="flex-1 p-2">
+        <ScrollArea className={cn("flex-1 p-2", !isSidebarOpen && "hidden")}>
           {/* Placeholder untuk daftar chat */}
           <div className="text-center text-sm text-muted-foreground mt-4">
             Belum ada riwayat.
@@ -86,9 +94,19 @@ export function Chatbot() {
       </div>
 
       {/* Kolom Chat Utama */}
-      <div className="w-2/3 flex flex-col">
-        <div className="p-8 border-b dark:border-gray-700 flex items-center gap-6">
-          <Avatar className="h-16 w-16">
+      <div className={cn("flex flex-col transition-all duration-300 ease-in-out", isSidebarOpen ? "w-2/3" : "w-full")}>
+        <div className="p-8 border-b dark:border-gray-700 flex items-center gap-6 relative">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="absolute left-2 top-1/2 -translate-y-1/2"
+          >
+            {isSidebarOpen ? <PanelLeftClose /> : <PanelLeftOpen />}
+            <span className="sr-only">Toggle Sidebar</span>
+          </Button>
+
+          <Avatar className="h-16 w-16 ml-12">
             <AvatarImage src="https://cdn-icons-png.flaticon.com/128/3273/3273828.png" alt="Chat.Maskuh" />
             <AvatarFallback>CM</AvatarFallback>
           </Avatar>
