@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Send, UserRound, Loader2, PanelLeftClose, PanelLeftOpen, Menu, FolderKanban, GitBranch, BookText, Code, FileCode, Package, ComponentIcon } from "lucide-react";
+import { Send, UserRound, Loader2, PanelLeftClose, PanelLeftOpen, Menu, FolderKanban, GitBranch, BookText, Code, FileCode, Package, ComponentIcon, GraduationCap, FileQuestion, Star, Video, BookOpen } from "lucide-react";
 import { chat } from "@/ai/flows/chatbot";
 import { cn } from "@/lib/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -252,6 +252,37 @@ export function Chatbot() {
                 </Card>
               </AccordionContent>
             </AccordionItem>
+            <AccordionItem value="item-2" className="border-none">
+              <AccordionTrigger className="text-base font-semibold hover:no-underline">
+                Maskuh Learning
+              </AccordionTrigger>
+              <AccordionContent>
+                <Card>
+                  <CardContent className="p-4 space-y-4">
+                    <div className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                      <GraduationCap className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">Getting Started</span>
+                    </div>
+                    <div className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                      <FileQuestion className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">Basic Concepts</span>
+                    </div>
+                    <div className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                      <Video className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">Tutorials</span>
+                    </div>
+                    <div className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                      <BookOpen className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">Case Studies</span>
+                    </div>
+                    <div className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                      <Star className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">Tips & Tricks</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </AccordionContent>
+            </AccordionItem>
           </Accordion>
         </ScrollArea>
       </div>
@@ -353,3 +384,5 @@ export function Chatbot() {
     </div>
   );
 }
+
+    
