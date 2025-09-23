@@ -12,6 +12,9 @@ import { cn } from "@/lib/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { CodeBlock } from './code-block';
 
 interface Message {
   id: string;
@@ -319,8 +322,8 @@ export function Chatbot() {
         <div className={cn("p-4 border-b dark:border-gray-700 whitespace-nowrap overflow-hidden", !isSidebarOpen && "hidden")}>
           <h2 className="text-xl font-semibold">Dashboard</h2>
         </div>
-        <ScrollArea className={cn("flex-1", !isSidebarOpen && "hidden")}>
-          <Accordion type="single" collapsible className="p-4">
+        <ScrollArea className={cn("flex-1 p-4", !isSidebarOpen && "hidden")}>
+          <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-1" className="border-none">
               <AccordionTrigger className="text-base font-semibold hover:no-underline">
                 Maskuh Learning
@@ -424,13 +427,32 @@ export function Chatbot() {
                   </Avatar>
               )}
               <div
-                  className={`max-w-xs md:max-w-md lg:max-w-lg rounded-lg px-4 py-2 ${
+                  className={`max-w-xs md:max-w-md lg:max-w-lg rounded-lg px-4 py-2 text-sm ${
                   message.sender === "user"
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted"
                   }`}
               >
-                  <p className="text-sm">{message.text}</p>
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      code({ node, className, children, ...props }) {
+                        const match = /language-(\w+)/.exec(className || '')
+                        return match ? (
+                          <CodeBlock
+                            language={match[1]}
+                            value={String(children).replace(/\n$/, '')}
+                          />
+                        ) : (
+                          <code className={className} {...props}>
+                            {children}
+                          </code>
+                        )
+                      },
+                    }}
+                  >
+                    {message.text}
+                  </ReactMarkdown>
               </div>
               {message.sender === "user" && (
                   <Avatar className="h-8 w-8">

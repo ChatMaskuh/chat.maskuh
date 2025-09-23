@@ -56,7 +56,9 @@
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.24.2",
     "chart.js": "^4.4.3",
-    "chartjs-plugin-datalabels": "^2.2.0"
+    "chartjs-plugin-datalabels": "^2.2.0",
+    "react-markdown": "^9.0.1",
+    "remark-gfm": "^4.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",
