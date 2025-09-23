@@ -71,7 +71,7 @@ export function Chatbot() {
   }, [messages]);
 
   return (
-    <div className="flex w-full max-w-4xl h-[90vh] max-h-[700px] bg-white dark:bg-gray-800 shadow-2xl rounded-lg overflow-hidden">
+    <div className="flex w-full h-full bg-white dark:bg-gray-800 shadow-2xl rounded-lg overflow-hidden">
       {/* Kolom Sidebar Internal */}
       <div className="w-1/3 border-r dark:border-gray-700 flex flex-col">
         <div className="p-4 border-b dark:border-gray-700">
