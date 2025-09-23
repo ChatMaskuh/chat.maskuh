@@ -21,13 +21,11 @@ export function Chatbot() {
   const scrollAreaViewportRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    if (scrollAreaViewportRef.current) {
-        setTimeout(() => {
-            if (scrollAreaViewportRef.current) {
-                scrollAreaViewportRef.current.scrollTop = scrollAreaViewportRef.current.scrollHeight;
-            }
-        }, 100);
-    }
+    setTimeout(() => {
+        if (scrollAreaViewportRef.current) {
+            scrollAreaViewportRef.current.scrollTop = scrollAreaViewportRef.current.scrollHeight;
+        }
+    }, 100);
   };
 
   const handleSend = async () => {
