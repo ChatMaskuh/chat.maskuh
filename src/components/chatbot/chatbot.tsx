@@ -6,11 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Send, UserRound, Loader2, PanelLeftClose, PanelLeftOpen, Menu, FolderKanban, GitBranch, BookText } from "lucide-react";
+import { Send, UserRound, Loader2, PanelLeftClose, PanelLeftOpen, Menu, FolderKanban, GitBranch, BookText, Code, FileCode, Package, ComponentIcon } from "lucide-react";
 import { chat } from "@/ai/flows/chatbot";
 import { cn } from "@/lib/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 interface Message {
   id: string;
@@ -18,12 +19,121 @@ interface Message {
   sender: "user" | "bot";
 }
 
+type DocContent = {
+  title: string;
+  icon: React.ReactNode;
+  content: React.ReactNode;
+};
+
 export function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [activeDialog, setActiveDialog] = useState<string | null>(null);
+
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+  const documentationContent: Record<string, DocContent> = {
+    'app-menu': {
+      title: 'APP MENU',
+      icon: <Menu className="h-6 w-6" />,
+      content: (
+        <div className="space-y-4 text-sm">
+          <p>Menu aplikasi dirancang untuk navigasi utama dan fungsionalitas. Saat ini, fokus utama adalah antarmuka chat, namun seiring berkembangnya aplikasi, menu-menu baru dapat ditambahkan di sidebar.</p>
+          <div className="p-3 bg-muted rounded-lg">
+            <h4 className="font-semibold mb-2">Item Saat Ini:</h4>
+            <ul className="list-disc list-inside space-y-1">
+              <li><span className="font-semibold">Dashboard:</span> Panel utama yang berisi dokumentasi dan riwayat (fitur mendatang).</li>
+              <li><span className="font-semibold">Chat Interface:</span> Area utama tempat Anda berinteraksi dengan Chat.Maskuh.</li>
+            </ul>
+          </div>
+        </div>
+      ),
+    },
+    'structure': {
+      title: 'STRUCTURE',
+      icon: <FolderKanban className="h-6 w-6" />,
+      content: (
+        <div className="space-y-4 text-sm">
+          <p>Proyek ini dibangun menggunakan Next.js dengan App Router, yang memberikan struktur yang terorganisir dan skalabel.</p>
+          <div className="space-y-3">
+            <div className="flex items-start gap-3">
+              <FileCode className="h-5 w-5 mt-0.5 text-primary shrink-0" />
+              <div>
+                <h4 className="font-semibold">src/app/</h4>
+                <p className="text-muted-foreground">Direktori utama untuk semua halaman dan rute aplikasi. `page.tsx` adalah halaman utama, dan `layout.tsx` adalah tata letak global.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <ComponentIcon className="h-5 w-5 mt-0.5 text-primary shrink-0" />
+              <div>
+                <h4 className="font-semibold">src/components/</h4>
+                <p className="text-muted-foreground">Berisi semua komponen React yang dapat digunakan kembali, termasuk komponen UI dari `shadcn/ui`.</p>
+              </div>
+            </div>
+             <div className="flex items-start gap-3">
+              <Code className="h-5 w-5 mt-0.5 text-primary shrink-0" />
+              <div>
+                <h4 className="font-semibold">src/ai/flows/</h4>
+                <p className="text-muted-foreground">Logika utama untuk Generative AI menggunakan Genkit. `chatbot.ts` menangani alur percakapan.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <Package className="h-5 w-5 mt-0.5 text-primary shrink-0" />
+              <div>
+                <h4 className="font-semibold">package.json</h4>
+                <p className="text-muted-foreground">Mendefinisikan semua dependensi proyek (seperti React, Next.js, Tailwind CSS, Genkit) dan skrip (seperti `dev`, `build`).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    'version': {
+      title: 'Maskuh Version',
+      icon: <GitBranch className="h-6 w-6" />,
+      content: (
+         <div className="space-y-2 text-sm">
+          <p>Informasi versi dan teknologi yang digunakan dalam aplikasi ini.</p>
+          <div className="flex justify-between items-center p-3 bg-muted rounded-lg">
+            <span className="font-semibold">Chat.Maskuh Version:</span>
+            <span className="font-mono text-primary bg-primary-foreground/20 px-2 py-1 rounded-md">1.0.0</span>
+          </div>
+           <div className="flex justify-between items-center p-3 bg-muted rounded-lg">
+            <span className="font-semibold">Next.js Version:</span>
+            <span className="font-mono text-primary bg-primary-foreground/20 px-2 py-1 rounded-md">15.3.3</span>
+          </div>
+          <div className="flex justify-between items-center p-3 bg-muted rounded-lg">
+            <span className="font-semibold">Genkit Version:</span>
+            <span className="font-mono text-primary bg-primary-foreground/20 px-2 py-1 rounded-md">latest</span>
+          </div>
+        </div>
+      ),
+    },
+    'api-docs': {
+      title: 'API Route Documentation',
+      icon: <BookText className="h-6 w-6" />,
+      content: (
+        <div className="space-y-4 text-sm">
+          <p>Aplikasi ini tidak menggunakan API Route tradisional Next.js. Sebagai gantinya, ia menggunakan **Genkit Flows** yang diekspos sebagai Server Actions.</p>
+          <div className="p-4 bg-muted rounded-lg">
+            <h4 className="font-semibold mb-2 flex items-center gap-2"><Code className="h-5 w-5" /> `src/ai/flows/chatbot.ts`</h4>
+            <p className="mb-2">File ini mendefinisikan logika inti dari chatbot:</p>
+            <ul className="list-disc list-inside space-y-2">
+              <li>
+                <span className="font-semibold">`chatFlow`</span>: Sebuah alur Genkit yang menerima pesan pengguna, memanggil model Gemini dengan prompt yang telah ditentukan, dan mengembalikan respons teks.
+              </li>
+               <li>
+                <span className="font-semibold">`chat(message)`</span>: Fungsi `async` yang diekspor dan dapat dipanggil langsung dari komponen klien (`'use client'`). Fungsi ini bertindak sebagai Server Action yang menjalankan `chatFlow` di sisi server.
+              </li>
+            </ul>
+             <p className="mt-3 text-xs text-muted-foreground">Pendekatan ini menyederhanakan arsitektur dengan menghilangkan kebutuhan untuk membuat dan mengelola endpoint API secara manual.</p>
+          </div>
+        </div>
+      ),
+    },
+  };
 
   const scrollToBottom = () => {
     if (scrollAreaRef.current) {
@@ -75,8 +185,34 @@ export function Chatbot() {
     scrollToBottom();
   }, [messages]);
 
+  const renderDialog = () => {
+    if (!activeDialog) return null;
+    const doc = documentationContent[activeDialog];
+    if (!doc) return null;
+
+    return (
+      <Dialog open={!!activeDialog} onOpenChange={(isOpen) => !isOpen && setActiveDialog(null)}>
+        <DialogContent className="sm:max-w-[625px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-3 text-2xl">
+              {doc.icon}
+              {doc.title}
+            </DialogTitle>
+            <DialogDescription>
+              Berikut adalah detail dokumentasi untuk {doc.title}.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            {doc.content}
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  };
+
   return (
     <div className="flex w-full h-full bg-white dark:bg-gray-800 shadow-2xl rounded-lg overflow-hidden">
+      {renderDialog()}
       {/* Kolom Sidebar Internal */}
       <div
         className={cn(
@@ -96,19 +232,19 @@ export function Chatbot() {
               <AccordionContent>
                 <Card>
                   <CardContent className="p-4 space-y-4">
-                    <div className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                    <div onClick={() => setActiveDialog('app-menu')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
                       <Menu className="h-5 w-5 text-muted-foreground" />
                       <span className="text-sm">APP MENU</span>
                     </div>
-                    <div className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                    <div onClick={() => setActiveDialog('structure')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
                       <FolderKanban className="h-5 w-5 text-muted-foreground" />
                       <span className="text-sm">STRUCTURE</span>
                     </div>
-                    <div className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                    <div onClick={() => setActiveDialog('version')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
                       <GitBranch className="h-5 w-5 text-muted-foreground" />
                       <span className="text-sm">Maskuh Version</span>
                     </div>
-                    <div className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                    <div onClick={() => setActiveDialog('api-docs')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
                       <BookText className="h-5 w-5 text-muted-foreground" />
                       <span className="text-sm">API Route Documentation</span>
                     </div>
