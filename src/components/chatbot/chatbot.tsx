@@ -269,9 +269,10 @@ export function Chatbot() {
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       console.error("Error getting bot response:", error);
+      const errorMessageText = error instanceof Error ? error.message : "Maaf, terjadi kesalahan. Silakan coba lagi.";
       const errorMessage: Message = {
         id: `bot-error-${Date.now()}`,
-        text: "Maaf, terjadi kesalahan. Silakan coba lagi.",
+        text: errorMessageText,
         sender: "bot",
       };
       setMessages((prev) => [...prev, errorMessage]);

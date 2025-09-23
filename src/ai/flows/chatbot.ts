@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview A simple chatbot flow.
@@ -12,6 +13,11 @@ const ChatInputSchema = z.string();
 const ChatOutputSchema = z.string();
 
 export async function chat(message: string): Promise<string> {
+    // Server-side check for the API key
+    if (!process.env.GEMINI_API_KEY) {
+        console.error("GEMINI_API_KEY is not set in the environment variables.");
+        throw new Error("Kesalahan Konfigurasi Server: Kunci API untuk layanan AI belum diatur.");
+    }
     return chatFlow(message);
 }
 
