@@ -319,8 +319,8 @@ export function Chatbot() {
         <div className={cn("p-4 border-b dark:border-gray-700 whitespace-nowrap overflow-hidden", !isSidebarOpen && "hidden")}>
           <h2 className="text-xl font-semibold">Dashboard</h2>
         </div>
-        <ScrollArea className={cn("flex-1 p-4", !isSidebarOpen && "hidden")}>
-          <Accordion type="single" collapsible defaultValue="item-1">
+        <ScrollArea className={cn("flex-1", !isSidebarOpen && "hidden")}>
+          <Accordion type="single" collapsible className="p-4">
           <AccordionItem value="item-1" className="border-none">
               <AccordionTrigger className="text-base font-semibold hover:no-underline">
                 Maskuh Learning
@@ -480,3 +480,5 @@ export function Chatbot() {
     </div>
   );
 }
+
+    
