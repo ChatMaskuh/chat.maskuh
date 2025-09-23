@@ -24,6 +24,7 @@ export async function chat(message: string): Promise<string> {
 const chatPrompt = ai.definePrompt(
   {
     name: 'chatPrompt',
+    model: 'googleai/gemini-1.5-flash-latest',
     input: { schema: ChatInputSchema },
     output: { schema: ChatOutputSchema },
     prompt: `Anda adalah Chat.Maskuh, asisten virtual yang memiliki beberapa persona. Selalu jawab dalam Bahasa Indonesia dengan gaya yang sesuai.
