@@ -279,7 +279,11 @@ export function Chatbot() {
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       console.error("Error getting bot response:", error);
-      const errorMessageText = error instanceof Error ? error.message : "Maaf, terjadi kesalahan. Silakan coba lagi.";
+      let errorMessageText = "Maaf, terjadi kesalahan. Silakan coba lagi nanti.";
+      if (error instanceof Error && error.message.includes("429")) {
+        errorMessageText = "Waduh, sepertinya terlalu banyak permintaan dalam waktu singkat. Coba lagi dalam beberapa detik ya. Aku butuh sedikit waktu buat napas 😅.";
+      }
+      
       const errorMessage: Message = {
         id: `bot-error-${Date.now()}`,
         text: errorMessageText,
@@ -513,3 +517,5 @@ export function Chatbot() {
     </div>
   );
 }
+
+    
