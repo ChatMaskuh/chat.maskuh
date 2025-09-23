@@ -4,8 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Send, UserRound, Loader2, BotMessageSquare } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Send, UserRound, Loader2 } from "lucide-react";
 import { chat } from "@/ai/flows/chatbot";
 
 interface Message {
@@ -71,7 +71,7 @@ export function Chatbot() {
   }, [messages]);
 
   return (
-    <div className="flex flex-col w-full max-w-2xl mx-auto h-full bg-white dark:bg-gray-800 shadow-2xl rounded-lg">
+    <div className="flex flex-col w-full max-w-2xl h-[90vh] max-h-[700px] bg-white dark:bg-gray-800 shadow-2xl rounded-lg">
       <div className="p-4 border-b dark:border-gray-700 flex items-center gap-3">
         <Avatar>
           <AvatarImage src="https://cdn-icons-png.flaticon.com/128/3273/3273828.png" alt="Chat.Maskuh" />
