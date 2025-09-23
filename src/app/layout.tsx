@@ -12,6 +12,9 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Chat.Maskuh",
   description: "A friendly chatbot to assist you.",
+  icons: {
+    icon: 'https://cdn-icons-png.flaticon.com/512/993/993733.png',
+  },
 };
 
 export default function RootLayout({
