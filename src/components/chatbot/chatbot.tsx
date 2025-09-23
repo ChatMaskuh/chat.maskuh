@@ -87,16 +87,16 @@ export function Chatbot() {
 
       {/* Kolom Chat Utama */}
       <div className="w-2/3 flex flex-col">
-        <div className="p-6 border-b dark:border-gray-700 flex items-center gap-4">
-          <Avatar className="h-12 w-12">
+        <div className="p-8 border-b dark:border-gray-700 flex items-center gap-6">
+          <Avatar className="h-16 w-16">
             <AvatarImage src="https://cdn-icons-png.flaticon.com/128/3273/3273828.png" alt="Chat.Maskuh" />
             <AvatarFallback>CM</AvatarFallback>
           </Avatar>
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">
+            <h2 className="text-3xl font-bold tracking-tight">
                 Chat.Maskuh
             </h2>
-            <p className="text-sm text-muted-foreground">Powered by Arlan Saputra</p>
+            <p className="text-base text-muted-foreground mt-1">Powered by Arlan Saputra</p>
           </div>
         </div>
 
