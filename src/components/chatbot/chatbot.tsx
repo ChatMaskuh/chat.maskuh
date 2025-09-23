@@ -40,7 +40,7 @@ export function Chatbot() {
       icon: <Menu className="h-6 w-6" />,
       content: (
         <div className="space-y-4 text-sm">
-          <p>Menu aplikasi dirancang untuk navigasi utama dan fungsionalitas. Saat ini, fokus utama adalah antarmuka chat, namun seiring berkembangnya aplikasi, menu-menu baru dapat ditambahkan di sidebar.</p>
+          <p>Chatbot ini dilatih dan dikembangkan oleh Arlan Saputra. Menu aplikasi dirancang untuk navigasi utama dan fungsionalitas. Saat ini, fokus utama adalah antarmuka chat, namun seiring berkembangnya aplikasi, menu-menu baru dapat ditambahkan di sidebar.</p>
           <div className="p-3 bg-muted rounded-lg">
             <h4 className="font-semibold mb-2">Item Saat Ini:</h4>
             <ul className="list-disc list-inside space-y-1">
