@@ -2,8 +2,10 @@ import { Chatbot } from '@/components/chatbot/chatbot';
 
 export default function Home() {
   return (
-    <main className="p-4 h-screen">
+    <main className="h-screen">
       <Chatbot />
     </main>
   );
 }
+
+    

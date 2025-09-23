@@ -32,7 +32,7 @@ export function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeDialog, setActiveDialog] = useState<string | null>(null);
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -502,5 +502,7 @@ export function Chatbot() {
     </div>
   );
 }
+
+    
 
     
