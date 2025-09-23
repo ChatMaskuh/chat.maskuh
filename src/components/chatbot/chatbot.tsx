@@ -108,6 +108,7 @@ export function Chatbot() {
             </div>
             {message.sender === "user" && (
                 <Avatar className="h-8 w-8">
+                    <AvatarImage src="https://cdn-icons-png.flaticon.com/128/1702/1702478.png" alt="User" />
                     <AvatarFallback>
                         <UserRound />
                     </AvatarFallback>
