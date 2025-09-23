@@ -83,7 +83,7 @@ export function Chatbot() {
         )}
       >
         <div className={cn("p-4 border-b dark:border-gray-700 whitespace-nowrap overflow-hidden", !isSidebarOpen && "hidden")}>
-          <h2 className="text-xl font-semibold">Riwayat Obrolan</h2>
+          <h2 className="text-xl font-semibold">Dashboard</h2>
         </div>
         <ScrollArea className={cn("flex-1 p-2", !isSidebarOpen && "hidden")}>
           {/* Placeholder untuk daftar chat */}
