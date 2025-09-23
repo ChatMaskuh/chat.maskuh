@@ -225,34 +225,7 @@ export function Chatbot() {
         </div>
         <ScrollArea className={cn("flex-1 p-2", !isSidebarOpen && "hidden")}>
           <Accordion type="single" collapsible defaultValue="item-1">
-            <AccordionItem value="item-1" className="border-none">
-              <AccordionTrigger className="text-base font-semibold hover:no-underline">
-                Maskuh Documentation
-              </AccordionTrigger>
-              <AccordionContent>
-                <Card>
-                  <CardContent className="p-4 space-y-4">
-                    <div onClick={() => setActiveDialog('app-menu')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                      <Menu className="h-5 w-5 text-muted-foreground" />
-                      <span className="text-sm">APP MENU</span>
-                    </div>
-                    <div onClick={() => setActiveDialog('structure')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                      <FolderKanban className="h-5 w-5 text-muted-foreground" />
-                      <span className="text-sm">STRUCTURE</span>
-                    </div>
-                    <div onClick={() => setActiveDialog('version')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                      <GitBranch className="h-5 w-5 text-muted-foreground" />
-                      <span className="text-sm">Maskuh Version</span>
-                    </div>
-                    <div onClick={() => setActiveDialog('api-docs')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                      <BookText className="h-5 w-5 text-muted-foreground" />
-                      <span className="text-sm">API Route Documentation</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-2" className="border-none">
+          <AccordionItem value="item-1" className="border-none">
               <AccordionTrigger className="text-base font-semibold hover:no-underline">
                 Maskuh Learning
               </AccordionTrigger>
@@ -278,6 +251,33 @@ export function Chatbot() {
                     <div className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
                       <Star className="h-5 w-5 text-muted-foreground" />
                       <span className="text-sm">Tips & Tricks</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-2" className="border-none">
+              <AccordionTrigger className="text-base font-semibold hover:no-underline">
+                Maskuh Documentation
+              </AccordionTrigger>
+              <AccordionContent>
+                <Card>
+                  <CardContent className="p-4 space-y-4">
+                    <div onClick={() => setActiveDialog('app-menu')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                      <Menu className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">APP MENU</span>
+                    </div>
+                    <div onClick={() => setActiveDialog('structure')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                      <FolderKanban className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">STRUCTURE</span>
+                    </div>
+                    <div onClick={() => setActiveDialog('version')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                      <GitBranch className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">Maskuh Version</span>
+                    </div>
+                    <div onClick={() => setActiveDialog('api-docs')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                      <BookText className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">API Route Documentation</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -384,5 +384,3 @@ export function Chatbot() {
     </div>
   );
 }
-
-    
