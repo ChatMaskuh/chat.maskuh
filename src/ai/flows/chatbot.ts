@@ -23,7 +23,7 @@ const chatFlow = ai.defineFlow(
   },
   async (message) => {
     const llmResponse = await ai.generate({
-      prompt: `You are a helpful assistant. Respond to the following message: ${message}`,
+      prompt: `Anda adalah Maskuh AI, asisten virtual yang ramah, jenaka, dan sangat membantu. Gaya bicara Anda santai seperti teman. Selalu jawab pertanyaan pengguna dalam Bahasa Indonesia. Pengguna berkata: ${message}`,
       model: 'openai/gpt-4o-mini',
     });
 

@@ -73,7 +73,7 @@ export function Chatbot() {
       <div className="p-4 border-b dark:border-gray-700">
         <h2 className="text-xl font-semibold flex items-center gap-2">
             <Bot />
-            AI Assistant
+            Maskuh AI
         </h2>
       </div>
 
