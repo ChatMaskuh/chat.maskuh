@@ -72,9 +72,13 @@ export function Chatbot() {
 
   return (
     <div className="flex flex-col w-full max-w-2xl mx-auto h-full bg-white dark:bg-gray-800 shadow-2xl rounded-lg">
-      <div className="p-4 border-b dark:border-gray-700">
-        <h2 className="text-xl font-semibold flex items-center gap-2">
+      <div className="p-4 border-b dark:border-gray-700 flex items-center gap-3">
+        <Avatar>
+          <AvatarFallback>
             <Bot />
+          </AvatarFallback>
+        </Avatar>
+        <h2 className="text-xl font-semibold">
             Chat.Maskuh
         </h2>
       </div>
@@ -138,7 +142,7 @@ export function Chatbot() {
             className="flex-1"
             disabled={isLoading}
           />
-          <Button onClick={handleSend} disabled={isLoading}>
+          <Button onClick={handleSend} disabled={isLoading} size="icon">
             {isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
