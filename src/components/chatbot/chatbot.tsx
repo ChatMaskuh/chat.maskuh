@@ -22,10 +22,13 @@ export function Chatbot() {
 
   const scrollToBottom = () => {
     if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTo({
-        top: scrollAreaRef.current.scrollHeight,
-        behavior: 'smooth'
-      });
+      const scrollAreaViewport = scrollAreaRef.current.querySelector('div');
+      if (scrollAreaViewport) {
+        scrollAreaViewport.scrollTo({
+          top: scrollAreaViewport.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
     }
   };
 
@@ -72,7 +75,7 @@ export function Chatbot() {
       <div className="p-4 border-b dark:border-gray-700">
         <h2 className="text-xl font-semibold flex items-center gap-2">
             <Bot />
-            Maskuh AI
+            Chat.Maskuh
         </h2>
       </div>
 
