@@ -44,7 +44,7 @@ export function Chatbot() {
       icon: <GraduationCap className="h-6 w-6" />,
       content: (
         <div className="space-y-4 text-sm">
-          <p>Selamat datang di Chat.Maskuh! Ini adalah asisten AI yang dirancang untuk membantu Anda dalam berbagai tugas. Anda dapat berinteraksi dengannya layaknya mengobrol dengan teman.</p>
+          <p>Selamat datang di Chat.Maskuh! Ini adalah asisten AI yang dirancang oleh Arlan Saputra untuk membantu Anda dalam berbagai tugas. Anda dapat berinteraksi dengannya layaknya mengobrol dengan teman.</p>
           <div className="p-3 bg-muted rounded-lg">
             <h4 className="font-semibold mb-2">Cara Memulai:</h4>
             <ul className="list-disc list-inside space-y-2">
@@ -135,7 +135,7 @@ export function Chatbot() {
                 <AlertTriangle className="h-5 w-5 mt-0.5 text-yellow-600 dark:text-yellow-400 shrink-0" />
                 <div>
                     <h4 className="font-semibold text-yellow-800 dark:text-yellow-200">Mengatasi Error "Too Many Requests"</h4>
-                    <p className="text-yellow-700 dark:text-yellow-300/90 mt-1">Jika Anda mengirim terlalu banyak pesan dalam waktu singkat, terkadang Anda bisa melihat pesan error "429 Too Many Requests".</p>
+                    <p className="text-yellow-700 dark:text-yellow-300/90 mt-1">Jika Anda mengirim terlalu banyak pesan dalam waktu singkat, API dapat memberi batasan sementara. Ini adalah mekanisme normal untuk memastikan layanan tetap stabil.</p>
                     <p className="text-yellow-700 dark:text-yellow-300/90 mt-2"><strong>Solusi:</strong> Cukup tunggu beberapa saat (sekitar 15-30 detik) sebelum mengirim pesan lagi. Ini akan memberi waktu bagi sistem untuk siap menerima permintaan Anda kembali.</p>
                 </div>
             </div>
