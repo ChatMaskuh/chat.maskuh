@@ -26,16 +26,17 @@ export async function chat(message: string): Promise<string> {
         return response || "Maaf, saya tidak dapat memberikan respons saat ini.";
     } catch (e: any) {
         console.error("Error executing chatFlow:", e);
-        // Return a user-friendly error message.
-        return `Maaf, terjadi kendala saat berkomunikasi dengan layanan AI. Silakan coba beberapa saat lagi.`;
+        // IMPORTANT: Return the actual error message for debugging on Netlify
+        return `Error dari layanan AI: ${e.message || 'Pesan error tidak diketahui.'}`;
     }
 }
 
 const chatPrompt = ai.definePrompt(
   {
     name: 'chatPrompt',
-    // We need to define a model, but the OpenAI plugin will use the one defined in the config.
-    model: 'gpt-4', 
+    // Explicitly define a model name. The OpenAI plugin will use this.
+    // The actual model used depends on the endpoint, but this is required.
+    model: 'mistralai/Mistral-7B-Instruct-v0.2', 
     input: { schema: ChatInputSchema },
     output: { schema: ChatOutputSchema },
     prompt: `Anda adalah Chat.Maskuh, asisten virtual yang memiliki beberapa persona. Selalu jawab dalam Bahasa Indonesia dengan gaya yang sesuai.
@@ -67,4 +68,3 @@ const chatFlow = ai.defineFlow(
     return llmResponse;
   }
 );
-
