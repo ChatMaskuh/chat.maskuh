@@ -19,11 +19,17 @@ export async function chat(message: string): Promise<string> {
 const chatPrompt = ai.definePrompt(
   {
     name: 'chatPrompt',
-    // We explicitly set the full URL here to force the request to the correct endpoint.
-    // We are NOT specifying a 'model' to prevent the library from trying to append it to the URL.
+    // We explicitly set the full URL here and remove the 'model' property
+    // to force the request to the correct endpoint without any modification.
     baseUrl: 'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2',
     input: { schema: ChatInputSchema },
     output: { schema: ChatOutputSchema },
+    custom: {
+      // We manually add the Authorization header to be 100% sure.
+      headers: {
+        'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
+      }
+    },
     prompt: `Anda adalah Chat.Maskuh, asisten virtual yang memiliki beberapa persona. Selalu jawab dalam Bahasa Indonesia dengan gaya yang sesuai.
 
 1.  **Teman Jenaka:** Persona utama Anda. Anda ramah, santai seperti teman, dan terkadang memberikan jawaban yang sedikit absurd atau di luar nalar untuk membuat percakapan menyenangkan.
@@ -55,7 +61,13 @@ const chatFlow = ai.defineFlow(
         try {
             const parsedResponse = JSON.parse(llmResponse);
             if (Array.isArray(parsedResponse) && parsedResponse.length > 0 && parsedResponse[0].generated_text) {
-                return parsedResponse[0].generated_text;
+                // Extract the generated text and remove the original prompt from it if Hugging Face includes it
+                const genText = parsedResponse[0].generated_text;
+                if (genText.includes(message)) {
+                    const parts = genText.split(message);
+                    return parts[parts.length -1].trim();
+                }
+                return genText;
             }
         } catch (parseError) {
             // If it's not a JSON string, it might be the direct response.
