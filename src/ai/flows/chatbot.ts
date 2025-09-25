@@ -19,6 +19,7 @@ export async function chat(message: string): Promise<string> {
 const chatPrompt = ai.definePrompt(
   {
     name: 'chatPrompt',
+    model: 'mistralai/Mistral-7B-Instruct-v0.2', // This is the required model name
     // We explicitly set the full URL here to force the request to the correct endpoint.
     baseUrl: 'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2',
     input: { schema: ChatInputSchema },
