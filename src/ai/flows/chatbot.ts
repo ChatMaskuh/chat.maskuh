@@ -23,8 +23,8 @@ export async function chat(message: string): Promise<string> {
         return await chatFlow(message);
     } catch (e: any) {
         console.error("Error executing chatFlow:", e);
-        // Provide a generic but helpful error message if the flow fails for other reasons
-        return "Maaf, terjadi kendala saat berkomunikasi dengan layanan AI. Silakan coba beberapa saat lagi.";
+        // Temporarily return the actual error message for debugging purposes.
+        return `Terjadi kesalahan pada server AI: ${e.message || 'Tidak ada pesan error spesifik.'}`;
     }
 }
 
