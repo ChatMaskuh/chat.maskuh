@@ -16,9 +16,16 @@ export async function chat(message: string): Promise<string> {
     // Server-side check for the API key
     if (!process.env.GEMINI_API_KEY) {
         console.error("GEMINI_API_KEY is not set in the environment variables.");
-        return "Kesalahan Konfigurasi Server: Kunci API untuk layanan AI belum diatur.";
+        // Return a more specific error message to the client
+        return "Kesalahan Konfigurasi Server: Kunci API untuk layanan AI belum diatur. Silakan periksa pengaturan environment di server deployment Anda.";
     }
-    return chatFlow(message);
+    try {
+        return await chatFlow(message);
+    } catch (e: any) {
+        console.error("Error executing chatFlow:", e);
+        // Provide a generic but helpful error message if the flow fails for other reasons
+        return "Maaf, terjadi kendala saat berkomunikasi dengan layanan AI. Silakan coba beberapa saat lagi.";
+    }
 }
 
 const chatPrompt = ai.definePrompt(

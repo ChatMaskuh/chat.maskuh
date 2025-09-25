@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Send, UserRound, Loader2, PanelLeftClose, PanelLeftOpen, Menu, FolderKanban, GitBranch, BookText, Code, FileCode, Package, ComponentIcon, GraduationCap, FileQuestion, Star, Video, BookOpen, AlertTriangle } from "lucide-react";
+import { Send, UserRound, Loader2, PanelLeftOpen, Menu, FolderKanban, GitBranch, BookText, Code, FileCode, Package, ComponentIcon, GraduationCap, FileQuestion, Star, Video, BookOpen, AlertTriangle } from "lucide-react";
 import { chat } from "@/ai/flows/chatbot";
 import { cn } from "@/lib/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -136,7 +136,7 @@ export function Chatbot() {
                 <AlertTriangle className="h-5 w-5 mt-0.5 text-yellow-600 dark:text-yellow-400 shrink-0" />
                 <div>
                     <h4 className="font-semibold text-yellow-800 dark:text-yellow-200">Mengatasi Error "Too Many Requests"</h4>
-                    <p className="text-yellow-700 dark:text-yellow-300/90 mt-1">Jika Anda mengirim terlalu banyak pesan dalam waktu singkat, API dapat memberi batasan sementara. Ini adalah mekanisme normal untuk memastikan layanan tetap stabil.</p>
+                    <p className="text-yellow-700 dark:text-yellow-300/90 mt-1">Jika Anda mengirim terlalu banyak pesan dalam waktu singkat, layanan AI dapat memberi batasan sementara. Ini adalah mekanisme normal untuk memastikan layanan tetap stabil untuk semua pengguna.</p>
                     <p className="text-yellow-700 dark:text-yellow-300/90 mt-2"><strong>Solusi:</strong> Cukup tunggu beberapa saat (sekitar 15-30 detik) sebelum mengirim pesan lagi. Ini akan memberi waktu bagi sistem untuk siap menerima permintaan Anda kembali.</p>
                 </div>
             </div>
@@ -271,10 +271,10 @@ export function Chatbot() {
     setIsLoading(true);
     
     try {
-      const botResponse = await chat(input);
+      const botResponseText = await chat(input);
       const botMessage: Message = {
         id: `bot-${Date.now()}`,
-        text: botResponse,
+        text: botResponseText,
         sender: "bot",
       };
       setMessages((prev) => [...prev, botMessage]);
@@ -327,71 +327,73 @@ export function Chatbot() {
   
   const renderSidebarContent = () => (
     <>
-      <SheetHeader>
+      <SheetHeader className="p-4 border-b">
         <SheetTitle>Dashboard</SheetTitle>
         <SheetDescription>Dokumentasi dan informasi proyek.</SheetDescription>
       </SheetHeader>
-      <ScrollArea className="flex-1 p-4">
-        <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="item-1" className="border-none">
-            <AccordionTrigger className="text-base font-semibold hover:no-underline">
-              Maskuh Learning
-            </AccordionTrigger>
-            <AccordionContent>
-              <Card>
-                <CardContent className="p-4 space-y-4">
-                  <div onClick={() => { setActiveDialog('learning-getting-started'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                    <GraduationCap className="h-5 w-5 text-muted-foreground" />
-                    <span className="text-sm">Getting Started</span>
-                  </div>
-                  <div onClick={() => { setActiveDialog('learning-basic-concepts'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                    <FileQuestion className="h-5 w-5 text-muted-foreground" />
-                    <span className="text-sm">Basic Concepts</span>
-                  </div>
-                  <div onClick={() => { setActiveDialog('learning-tutorials'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                    <Video className="h-5 w-5 text-muted-foreground" />
-                    <span className="text-sm">Tutorials</span>
-                  </div>
-                  <div onClick={() => { setActiveDialog('learning-case-studies'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                    <BookOpen className="h-5 w-5 text-muted-foreground" />
-                    <span className="text-sm">Case Studies</span>
-                  </div>
-                  <div onClick={() => { setActiveDialog('learning-tips-tricks'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                    <Star className="h-5 w-5 text-muted-foreground" />
-                    <span className="text-sm">Tips & Tricks</span>
-                  </div>
-                </CardContent>
-              </Card>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="item-2" className="border-none">
-            <AccordionTrigger className="text-base font-semibold hover:no-underline">
-              Maskuh Documentation
-            </AccordionTrigger>
-            <AccordionContent>
-              <Card>
-                <CardContent className="p-4 space-y-4">
-                  <div onClick={() => { setActiveDialog('app-menu'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                    <Menu className="h-5 w-5 text-muted-foreground" />
-                    <span className="text-sm">APP MENU</span>
-                  </div>
-                  <div onClick={() => { setActiveDialog('structure'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                    <FolderKanban className="h-5 w-5 text-muted-foreground" />
-                    <span className="text-sm">STRUCTURE</span>
-                  </div>
-                  <div onClick={() => { setActiveDialog('version'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                    <GitBranch className="h-5 w-5 text-muted-foreground" />
-                    <span className="text-sm">Maskuh Version</span>
-                  </div>
-                  <div onClick={() => { setActiveDialog('api-docs'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                    <BookText className="h-5 w-5 text-muted-foreground" />
-                    <span className="text-sm">API Route Documentation</span>
-                  </div>
-                </CardContent>
-              </Card>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+      <ScrollArea className="flex-1">
+        <div className="p-4">
+          <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value="item-1" className="border-none">
+              <AccordionTrigger className="text-base font-semibold hover:no-underline">
+                Maskuh Learning
+              </AccordionTrigger>
+              <AccordionContent>
+                <Card>
+                  <CardContent className="p-4 space-y-4">
+                    <div onClick={() => { setActiveDialog('learning-getting-started'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                      <GraduationCap className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">Getting Started</span>
+                    </div>
+                    <div onClick={() => { setActiveDialog('learning-basic-concepts'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                      <FileQuestion className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">Basic Concepts</span>
+                    </div>
+                    <div onClick={() => { setActiveDialog('learning-tutorials'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                      <Video className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">Tutorials</span>
+                    </div>
+                    <div onClick={() => { setActiveDialog('learning-case-studies'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                      <BookOpen className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">Case Studies</span>
+                    </div>
+                    <div onClick={() => { setActiveDialog('learning-tips-tricks'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                      <Star className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">Tips & Tricks</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-2" className="border-none">
+              <AccordionTrigger className="text-base font-semibold hover:no-underline">
+                Maskuh Documentation
+              </AccordionTrigger>
+              <AccordionContent>
+                <Card>
+                  <CardContent className="p-4 space-y-4">
+                    <div onClick={() => { setActiveDialog('app-menu'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                      <Menu className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">APP MENU</span>
+                    </div>
+                    <div onClick={() => { setActiveDialog('structure'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                      <FolderKanban className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">STRUCTURE</span>
+                    </div>
+                    <div onClick={() => { setActiveDialog('version'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                      <GitBranch className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">Maskuh Version</span>
+                    </div>
+                    <div onClick={() => { setActiveDialog('api-docs'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                      <BookText className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">API Route Documentation</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
       </ScrollArea>
     </>
   );
@@ -401,7 +403,7 @@ export function Chatbot() {
       {renderDialog()}
       
       <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
-        <SheetContent side="left" className="w-[350px] sm:w-[400px] flex flex-col">
+        <SheetContent side="left" className="w-[350px] sm:w-[400px] flex flex-col p-0">
             {renderSidebarContent()}
         </SheetContent>
       </Sheet>
@@ -518,5 +520,3 @@ export function Chatbot() {
     </div>
   );
 }
-
-    
