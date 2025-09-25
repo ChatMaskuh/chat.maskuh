@@ -20,11 +20,13 @@ export async function chat(message: string): Promise<string> {
         return "Kesalahan Konfigurasi Server: Kunci API untuk layanan AI belum diatur. Silakan periksa pengaturan environment di server deployment Anda.";
     }
     try {
-        return await chatFlow(message);
+        const response = await chatFlow(message);
+        // Genkit flows can sometimes return null or undefined, so we safeguard against that.
+        return response || "Maaf, saya tidak dapat memberikan respons saat ini.";
     } catch (e: any) {
         console.error("Error executing chatFlow:", e);
-        // Temporarily return the actual error message for debugging purposes.
-        return `Terjadi kesalahan pada server AI: ${e.message || 'Tidak ada pesan error spesifik.'}`;
+        // Return a user-friendly error message.
+        return `Maaf, terjadi kendala saat berkomunikasi dengan layanan AI. Silakan coba beberapa saat lagi.`;
     }
 }
 
@@ -58,7 +60,8 @@ const chatFlow = ai.defineFlow(
     outputSchema: ChatOutputSchema,
   },
   async (message) => {
+    // The prompt now directly returns the string output when the output schema is a simple string.
     const llmResponse = await chatPrompt(message);
-    return llmResponse.output!;
+    return llmResponse;
   }
 );
