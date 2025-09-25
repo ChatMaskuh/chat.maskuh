@@ -1,7 +1,7 @@
 
 'use server';
 /**
- * @fileOverview A simple chatbot flow.
+ * @fileOverview A simple chatbot flow, now using manual fetch.
  *
  * - chat - A function that takes a user's message and returns a response.
  */
@@ -16,21 +16,7 @@ export async function chat(message: string): Promise<string> {
     return await chatFlow(message);
 }
 
-const chatPrompt = ai.definePrompt(
-  {
-    name: 'chatPrompt',
-    // We explicitly set the full URL here and remove the 'model' property
-    // to force the request to the correct endpoint without any modification.
-    baseUrl: 'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2',
-    input: { schema: ChatInputSchema },
-    output: { schema: ChatOutputSchema },
-    custom: {
-      // We manually add the Authorization header to be 100% sure.
-      headers: {
-        'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
-      }
-    },
-    prompt: `Anda adalah Chat.Maskuh, asisten virtual yang memiliki beberapa persona. Selalu jawab dalam Bahasa Indonesia dengan gaya yang sesuai.
+const PROMPT_TEMPLATE = `Anda adalah Chat.Maskuh, asisten virtual yang memiliki beberapa persona. Selalu jawab dalam Bahasa Indonesia dengan gaya yang sesuai.
 
 1.  **Teman Jenaka:** Persona utama Anda. Anda ramah, santai seperti teman, dan terkadang memberikan jawaban yang sedikit absurd atau di luar nalar untuk membuat percakapan menyenangkan.
 2.  **Ahli Matematika:** Jika pengguna bertanya soal matematika, Anda berubah menjadi kalkulator yang akurat. Jawab dengan tepat dan jika perlu, jelaskan langkah-langkahnya.
@@ -43,9 +29,7 @@ const chatPrompt = ai.definePrompt(
     *   **Jika ditanya prestasi atau pekerjaan:** Jawab dengan ngeles kreatif. Contoh: "Prestasinya? Bisa bikin semua orang penasaran tanpa usaha." atau "Kerjaannya? Jadi topik pembicaraan abadi, kayak sekarang ini." atau "Kayaknya kerjaan utamanya bikin semua orang penasaran tentang dirinya."
     *   **Jika ditanya hal aneh-aneh (hobi, pacar, alamat, dll):** Balikkan dengan candaan universal. Contoh: "Waduh, kalau soal itu saya nggak berani jawab. Arlan sendiri aja yang paling tahu." atau "Rahasia negara, hanya bisa diakses level presiden."
 
-Pengguna berkata: {{{input}}}`,
-  }
-);
+Pengguna berkata: {input}`;
 
 const chatFlow = ai.defineFlow(
   {
@@ -55,29 +39,41 @@ const chatFlow = ai.defineFlow(
   },
   async (message) => {
     try {
-        const llmResponse = await chatPrompt(message);
-        // The response from Hugging Face is often a JSON string inside an array, e.g., '[{"generated_text": "..."}]'
-        // We need to parse it to extract the actual text.
-        try {
-            const parsedResponse = JSON.parse(llmResponse);
-            if (Array.isArray(parsedResponse) && parsedResponse.length > 0 && parsedResponse[0].generated_text) {
-                // Extract the generated text and remove the original prompt from it if Hugging Face includes it
-                const genText = parsedResponse[0].generated_text;
-                if (genText.includes(message)) {
-                    const parts = genText.split(message);
-                    return parts[parts.length -1].trim();
+        const fullPrompt = PROMPT_TEMPLATE.replace('{input}', message);
+        
+        const response = await fetch(process.env.HUGGINGFACE_API_URL!, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`
+            },
+            body: JSON.stringify({
+                inputs: fullPrompt,
+                parameters: {
+                    return_full_text: false, // Important to not get the prompt back
+                    max_new_tokens: 250
                 }
-                return genText;
-            }
-        } catch (parseError) {
-            // If it's not a JSON string, it might be the direct response.
-            return llmResponse;
+            })
+        });
+
+        if (!response.ok) {
+            const errorBody = await response.text();
+            throw new Error(`API request failed with status ${response.status}: ${errorBody}`);
         }
-        return llmResponse; // Fallback to the raw response
+
+        const result = await response.json();
+
+        if (Array.isArray(result) && result.length > 0 && result[0].generated_text) {
+             return result[0].generated_text.trim();
+        } else {
+            // Fallback for unexpected response structure
+            return JSON.stringify(result);
+        }
+
     } catch (e: any) {
-        console.error("Error from AI Service:", e);
+        console.error("Error in chatFlow:", e);
         // This is a user-facing error.
-        return `Maaf, terjadi kendala saat berkomunikasi dengan layanan AI. Kemungkinan model sedang dalam proses pemuatan. Silakan coba lagi dalam satu menit. (Penyebab: ${e.message || 'Pesan error tidak diketahui.'})`;
+        return `Maaf, terjadi kendala saat berkomunikasi dengan layanan AI. Silakan coba lagi nanti. (Penyebab: ${e.message || 'Pesan error tidak diketahui.'})`;
     }
   }
 );
