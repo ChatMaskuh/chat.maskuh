@@ -13,21 +13,7 @@ const ChatInputSchema = z.string();
 const ChatOutputSchema = z.string();
 
 export async function chat(message: string): Promise<string> {
-    // DEBUGGING: Return the environment variables themselves to check if they are loaded.
-    const apiKey = process.env.HUGGINGFACE_API_KEY;
-    const apiUrl = process.env.HUGGINGFACE_API_URL;
-
-    const apiKeyExists = !!apiKey && apiKey.startsWith('hf_');
-    const apiUrlExists = !!apiUrl;
-
-    return `
-    DEBUGGING INFO:
-    API Key Loaded: ${apiKeyExists ? 'Yes' : 'No'}
-    API URL Loaded: ${apiUrlExists ? 'Yes' : 'No'}
-    
-    API Key Value (first 5 chars): ${apiKey?.substring(0, 5) || 'Not Set'}
-    API URL Value: ${apiUrl || 'Not Set'}
-    `;
+    return await chatFlow(message);
 }
 
 const chatPrompt = ai.definePrompt(
@@ -65,8 +51,8 @@ const chatFlow = ai.defineFlow(
         return llmResponse;
     } catch (e: any) {
         console.error("Error from AI Service:", e);
-        // Return the actual error message for debugging.
-        return `Error dari layanan AI: ${e.message || 'Pesan error tidak diketahui.'}`;
+        // This is a user-facing error.
+        return `Maaf, terjadi kendala saat berkomunikasi dengan layanan AI. Kemungkinan model sedang dalam proses pemuatan. Silakan coba lagi dalam satu menit. (${e.message || 'Pesan error tidak diketahui.'})`;
     }
   }
 );
