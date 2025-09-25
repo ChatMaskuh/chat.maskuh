@@ -14,10 +14,10 @@ const ChatOutputSchema = z.string();
 
 export async function chat(message: string): Promise<string> {
     // Server-side check for the API key
-    if (!process.env.GEMINI_API_KEY) {
-        console.error("GEMINI_API_KEY is not set in the environment variables.");
+    if (!process.env.HUGgingface_API_KEY || !process.env.HUGGINGFACE_API_URL) {
+        console.error("HUGGINGFACE_API_KEY or HUGGINGFACE_API_URL is not set in the environment variables.");
         // Return a more specific error message to the client
-        return "Kesalahan Konfigurasi Server: Kunci API untuk layanan AI belum diatur. Silakan periksa pengaturan environment di server deployment Anda.";
+        return "Kesalahan Konfigurasi Server: Kunci atau URL API untuk layanan Hugging Face belum diatur. Silakan periksa pengaturan environment di server deployment Anda.";
     }
     try {
         const response = await chatFlow(message);
@@ -26,14 +26,15 @@ export async function chat(message: string): Promise<string> {
     } catch (e: any) {
         console.error("Error executing chatFlow:", e);
         // Return a user-friendly error message.
-        return `Maaf, terjadi kendala saat berkomunikasi dengan layanan AI. Silakan coba beberapa saat lagi.`;
+        return `Maaf, terjadi kendala saat berkomunikasi dengan layanan AI: ${e.message}`;
     }
 }
 
 const chatPrompt = ai.definePrompt(
   {
     name: 'chatPrompt',
-    model: 'googleai/gemini-1.5-flash-latest',
+    // We need to define a model, but the OpenAI plugin will use the one defined in the config.
+    model: 'gpt-4', 
     input: { schema: ChatInputSchema },
     output: { schema: ChatOutputSchema },
     prompt: `Anda adalah Chat.Maskuh, asisten virtual yang memiliki beberapa persona. Selalu jawab dalam Bahasa Indonesia dengan gaya yang sesuai.

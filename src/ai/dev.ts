@@ -3,13 +3,13 @@ import { config } from 'dotenv';
 config();
 
 import {genkit} from 'genkit';
-import {googleAI} from '@genkit-ai/googleai';
+import {openAI} from 'genkitx-openai';
 
 export const ai = genkit({
   plugins: [
-    googleAI({
-      apiKey: process.env.GEMINI_API_KEY,
-      model: 'googleai/gemini-1.5-flash-latest',
+    openAI({
+      apiKey: process.env.HUGGINGFACE_API_KEY || 'hf_...',
+      baseUrl: process.env.HUGGINGFACE_API_URL,
     }),
   ],
 });
