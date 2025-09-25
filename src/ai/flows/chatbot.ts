@@ -13,29 +13,26 @@ const ChatInputSchema = z.string();
 const ChatOutputSchema = z.string();
 
 export async function chat(message: string): Promise<string> {
-    // Server-side check for the API key and URL
-    if (!process.env.HUGGINGFACE_API_KEY || !process.env.HUGGINGFACE_API_URL) {
-        console.error("HUGGINGFACE_API_KEY or HUGGINGFACE_API_URL is not set in the environment variables.");
-        // Return a more specific error message to the client
-        return "Kesalahan Konfigurasi Server: Kunci atau URL API untuk layanan Hugging Face belum diatur. Silakan periksa pengaturan environment di server deployment Anda.";
-    }
+    // DEBUGGING: Return the environment variables themselves to check if they are loaded.
+    const apiKey = process.env.HUGGINGFACE_API_KEY;
+    const apiUrl = process.env.HUGGINGFACE_API_URL;
 
-    try {
-        const response = await chatFlow(message);
-        // Genkit flows can sometimes return null or undefined, so we safeguard against that.
-        return response || "Maaf, saya tidak dapat memberikan respons saat ini.";
-    } catch (e: any) {
-        console.error("Error executing chatFlow:", e);
-        // IMPORTANT: Return the actual error message for debugging on Netlify
-        return `Error dari layanan AI: ${e.message || 'Pesan error tidak diketahui.'}`;
-    }
+    const apiKeyExists = !!apiKey && apiKey.startsWith('hf_');
+    const apiUrlExists = !!apiUrl;
+
+    return `
+    DEBUGGING INFO:
+    API Key Loaded: ${apiKeyExists ? 'Yes' : 'No'}
+    API URL Loaded: ${apiUrlExists ? 'Yes' : 'No'}
+    
+    API Key Value (first 5 chars): ${apiKey?.substring(0, 5) || 'Not Set'}
+    API URL Value: ${apiUrl || 'Not Set'}
+    `;
 }
 
 const chatPrompt = ai.definePrompt(
   {
     name: 'chatPrompt',
-    // Explicitly define a model name. The OpenAI plugin will use this.
-    // The actual model used depends on the endpoint, but this is required.
     model: 'mistralai/Mistral-7B-Instruct-v0.2', 
     input: { schema: ChatInputSchema },
     output: { schema: ChatOutputSchema },
@@ -63,8 +60,13 @@ const chatFlow = ai.defineFlow(
     outputSchema: ChatOutputSchema,
   },
   async (message) => {
-    // The prompt now directly returns the string output when the output schema is a simple string.
-    const llmResponse = await chatPrompt(message);
-    return llmResponse;
+    try {
+        const llmResponse = await chatPrompt(message);
+        return llmResponse;
+    } catch (e: any) {
+        console.error("Error from AI Service:", e);
+        // Return the actual error message for debugging.
+        return `Error dari layanan AI: ${e.message || 'Pesan error tidak diketahui.'}`;
+    }
   }
 );
