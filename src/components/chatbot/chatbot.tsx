@@ -135,8 +135,8 @@ export function Chatbot() {
                 <AlertTriangle className="h-5 w-5 mt-0.5 text-yellow-600 dark:text-yellow-400 shrink-0" />
                 <div>
                     <h4 className="font-semibold text-yellow-800 dark:text-yellow-200">Mengatasi Error "Too Many Requests"</h4>
-                    <p className="text-yellow-700 dark:text-yellow-300/90 mt-1">Aplikasi ini menggunakan paket gratis (Free Tier) dari Google Gemini API. Jika Anda mengirim terlalu banyak pesan dalam waktu singkat, Anda mungkin akan melihat pesan error "429 Too Many Requests".</p>
-                    <p className="text-yellow-700 dark:text-yellow-300/90 mt-2"><strong>Solusi:</strong> Cukup tunggu sekitar 15-30 detik sebelum mengirim pesan lagi. Ini akan memberi waktu bagi kuota Anda untuk di-reset.</p>
+                    <p className="text-yellow-700 dark:text-yellow-300/90 mt-1">Jika Anda mengirim terlalu banyak pesan dalam waktu singkat, terkadang Anda bisa melihat pesan error "429 Too Many Requests".</p>
+                    <p className="text-yellow-700 dark:text-yellow-300/90 mt-2"><strong>Solusi:</strong> Cukup tunggu beberapa saat (sekitar 15-30 detik) sebelum mengirim pesan lagi. Ini akan memberi waktu bagi sistem untuk siap menerima permintaan Anda kembali.</p>
                 </div>
             </div>
           </div>
@@ -517,5 +517,7 @@ export function Chatbot() {
     </div>
   );
 }
+
+    
 
     
