@@ -13,12 +13,13 @@ const ChatInputSchema = z.string();
 const ChatOutputSchema = z.string();
 
 export async function chat(message: string): Promise<string> {
-    // Server-side check for the API key
+    // Server-side check for the API key and URL
     if (!process.env.HUGGINGFACE_API_KEY || !process.env.HUGGINGFACE_API_URL) {
         console.error("HUGGINGFACE_API_KEY or HUGGINGFACE_API_URL is not set in the environment variables.");
         // Return a more specific error message to the client
         return "Kesalahan Konfigurasi Server: Kunci atau URL API untuk layanan Hugging Face belum diatur. Silakan periksa pengaturan environment di server deployment Anda.";
     }
+
     try {
         const response = await chatFlow(message);
         // Genkit flows can sometimes return null or undefined, so we safeguard against that.
