@@ -9,7 +9,7 @@ export const ai = genkit({
   plugins: [
     openAI({
       apiKey: process.env.HUGGINGFACE_API_KEY || 'hf_...',
-      baseUrl: 'https://api-inference.huggingface.co/v1', // The general API endpoint
+      // baseUrl is now defined directly in the prompt
     }),
   ],
 });

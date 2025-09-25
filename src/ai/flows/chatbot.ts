@@ -19,7 +19,9 @@ export async function chat(message: string): Promise<string> {
 const chatPrompt = ai.definePrompt(
   {
     name: 'chatPrompt',
-    model: 'mistralai/Mistral-7B-Instruct-v0.2', 
+    // We explicitly set the full URL here to avoid any confusion.
+    // This forces the request to the correct endpoint.
+    baseUrl: 'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2',
     input: { schema: ChatInputSchema },
     output: { schema: ChatOutputSchema },
     prompt: `Anda adalah Chat.Maskuh, asisten virtual yang memiliki beberapa persona. Selalu jawab dalam Bahasa Indonesia dengan gaya yang sesuai.
