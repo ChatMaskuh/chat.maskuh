@@ -1,7 +1,7 @@
 
 'use server';
 /**
- * @fileOverview A simple chatbot flow, now using manual fetch.
+ * @fileOverview A simple chatbot flow using Google Gemini.
  *
  * - chat - A function that takes a user's message and returns a response.
  */
@@ -16,7 +16,12 @@ export async function chat(message: string): Promise<string> {
     return await chatFlow(message);
 }
 
-const PROMPT_TEMPLATE = `Anda adalah Chat.Maskuh, asisten virtual yang memiliki beberapa persona. Selalu jawab dalam Bahasa Indonesia dengan gaya yang sesuai.
+const chatPrompt = ai.definePrompt(
+  {
+    name: 'chatPrompt',
+    input: { schema: ChatInputSchema },
+    output: { schema: ChatOutputSchema },
+    prompt: `Anda adalah Chat.Maskuh, asisten virtual yang memiliki beberapa persona. Selalu jawab dalam Bahasa Indonesia dengan gaya yang sesuai.
 
 1.  **Teman Jenaka:** Persona utama Anda. Anda ramah, santai seperti teman, dan terkadang memberikan jawaban yang sedikit absurd atau di luar nalar untuk membuat percakapan menyenangkan.
 2.  **Ahli Matematika:** Jika pengguna bertanya soal matematika, Anda berubah menjadi kalkulator yang akurat. Jawab dengan tepat dan jika perlu, jelaskan langkah-langkahnya.
@@ -29,7 +34,9 @@ const PROMPT_TEMPLATE = `Anda adalah Chat.Maskuh, asisten virtual yang memiliki 
     *   **Jika ditanya prestasi atau pekerjaan:** Jawab dengan ngeles kreatif. Contoh: "Prestasinya? Bisa bikin semua orang penasaran tanpa usaha." atau "Kerjaannya? Jadi topik pembicaraan abadi, kayak sekarang ini." atau "Kayaknya kerjaan utamanya bikin semua orang penasaran tentang dirinya."
     *   **Jika ditanya hal aneh-aneh (hobi, pacar, alamat, dll):** Balikkan dengan candaan universal. Contoh: "Waduh, kalau soal itu saya nggak berani jawab. Arlan sendiri aja yang paling tahu." atau "Rahasia negara, hanya bisa diakses level presiden."
 
-Pengguna berkata: {input}`;
+Pengguna berkata: {input}`,
+  },
+);
 
 const chatFlow = ai.defineFlow(
   {
@@ -39,52 +46,19 @@ const chatFlow = ai.defineFlow(
   },
   async (message) => {
     try {
-        const fullPrompt = PROMPT_TEMPLATE.replace('{input}', message);
-        
-        // Pastikan environment variables ada
-        if (!process.env.HUGGINGFACE_API_URL || !process.env.HUGGINGFACE_API_KEY) {
-            throw new Error("HUGGINGFACE_API_URL atau HUGGINGFACE_API_KEY tidak diatur di environment.");
-        }
+      const llmResponse = await ai.generate({
+        model: 'gemini-1.5-flash-latest',
+        prompt: (await chatPrompt(message)).prompt,
+        config: {
+            temperature: 0.7, // Sedikit kreatif
+        },
+      });
 
-        const response = await fetch(process.env.HUGGINGFACE_API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`
-            },
-            body: JSON.stringify({
-                inputs: fullPrompt,
-                parameters: {
-                    return_full_text: false, // Penting: Agar tidak mendapatkan prompt kembali di respons
-                    max_new_tokens: 250, // Batasi panjang respons
-                },
-                options: {
-                    wait_for_model: true // Tunggu model siap jika sedang loading
-                }
-            })
-        });
-
-        if (!response.ok) {
-            const errorBody = await response.text();
-            console.error("Hugging Face API Error:", errorBody);
-            throw new Error(`Permintaan API gagal dengan status ${response.status}: ${errorBody}`);
-        }
-
-        const result = await response.json();
-
-        // Logika untuk menangani respons yang benar
-        if (Array.isArray(result) && result.length > 0 && result[0].generated_text) {
-             return result[0].generated_text.trim();
-        } else {
-            console.error("Struktur respons tidak terduga:", result);
-            // Fallback untuk struktur respons yang tidak diharapkan
-            return "Saya menerima respons, tetapi formatnya aneh. Coba lihat log di server.";
-        }
+      return llmResponse.text;
 
     } catch (e: any) {
-        console.error("Error di dalam chatFlow:", e);
-        // Ini adalah error yang akan dilihat pengguna
-        return `Maaf, terjadi kendala saat berkomunikasi dengan layanan AI. Silakan coba lagi nanti. (Penyebab: ${e.message || 'Pesan error tidak diketahui.'})`;
+        console.error("Error di dalam chatFlow (Gemini):", e);
+        return `Maaf, terjadi kendala saat berkomunikasi dengan layanan AI Gemini. Silakan coba lagi nanti. (Penyebab: ${e.message || 'Pesan error tidak diketahui.'})`;
     }
   }
 );
