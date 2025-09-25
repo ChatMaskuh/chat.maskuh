@@ -49,7 +49,18 @@ const chatFlow = ai.defineFlow(
   async (message) => {
     try {
         const llmResponse = await chatPrompt(message);
-        return llmResponse;
+        // The response from Hugging Face is often a JSON string inside an array, e.g., '[{"generated_text": "..."}]'
+        // We need to parse it to extract the actual text.
+        try {
+            const parsedResponse = JSON.parse(llmResponse);
+            if (Array.isArray(parsedResponse) && parsedResponse.length > 0 && parsedResponse[0].generated_text) {
+                return parsedResponse[0].generated_text;
+            }
+        } catch (parseError) {
+            // If it's not a JSON string, it might be the direct response.
+            return llmResponse;
+        }
+        return llmResponse; // Fallback to the raw response
     } catch (e: any) {
         console.error("Error from AI Service:", e);
         // This is a user-facing error.
