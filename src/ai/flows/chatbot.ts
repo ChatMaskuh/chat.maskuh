@@ -41,7 +41,12 @@ const chatFlow = ai.defineFlow(
     try {
         const fullPrompt = PROMPT_TEMPLATE.replace('{input}', message);
         
-        const response = await fetch(process.env.HUGGINGFACE_API_URL!, {
+        // Pastikan environment variables ada
+        if (!process.env.HUGGINGFACE_API_URL || !process.env.HUGGINGFACE_API_KEY) {
+            throw new Error("HUGGINGFACE_API_URL atau HUGGINGFACE_API_KEY tidak diatur di environment.");
+        }
+
+        const response = await fetch(process.env.HUGGINGFACE_API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -50,29 +55,35 @@ const chatFlow = ai.defineFlow(
             body: JSON.stringify({
                 inputs: fullPrompt,
                 parameters: {
-                    return_full_text: false, // Important to not get the prompt back
-                    max_new_tokens: 250
+                    return_full_text: false, // Penting: Agar tidak mendapatkan prompt kembali di respons
+                    max_new_tokens: 250, // Batasi panjang respons
+                },
+                options: {
+                    wait_for_model: true // Tunggu model siap jika sedang loading
                 }
             })
         });
 
         if (!response.ok) {
             const errorBody = await response.text();
-            throw new Error(`API request failed with status ${response.status}: ${errorBody}`);
+            console.error("Hugging Face API Error:", errorBody);
+            throw new Error(`Permintaan API gagal dengan status ${response.status}: ${errorBody}`);
         }
 
         const result = await response.json();
 
+        // Logika untuk menangani respons yang benar
         if (Array.isArray(result) && result.length > 0 && result[0].generated_text) {
              return result[0].generated_text.trim();
         } else {
-            // Fallback for unexpected response structure
-            return JSON.stringify(result);
+            console.error("Struktur respons tidak terduga:", result);
+            // Fallback untuk struktur respons yang tidak diharapkan
+            return "Saya menerima respons, tetapi formatnya aneh. Coba lihat log di server.";
         }
 
     } catch (e: any) {
-        console.error("Error in chatFlow:", e);
-        // This is a user-facing error.
+        console.error("Error di dalam chatFlow:", e);
+        // Ini adalah error yang akan dilihat pengguna
         return `Maaf, terjadi kendala saat berkomunikasi dengan layanan AI. Silakan coba lagi nanti. (Penyebab: ${e.message || 'Pesan error tidak diketahui.'})`;
     }
   }
