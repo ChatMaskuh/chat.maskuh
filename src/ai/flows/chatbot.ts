@@ -45,12 +45,8 @@ const chatFlow = ai.defineFlow(
     outputSchema: ChatOutputSchema,
   },
   async (message) => {
-    try {
-        const llmResponse = await chatPrompt(message);
-        return llmResponse;
-    } catch (e: any) {
-        console.error("Error di dalam chatFlow (Gemini):", e);
-        return `Maaf, terjadi kendala saat berkomunikasi dengan layanan AI Gemini. Silakan coba lagi nanti. (Penyebab: ${e.message || 'Pesan error tidak diketahui.'})`;
-    }
+    // Simplified the call to be more robust.
+    const llmResponse = await chatPrompt(message);
+    return llmResponse;
   }
 );
