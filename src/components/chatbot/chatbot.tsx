@@ -15,6 +15,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { CodeBlock } from './code-block';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 
 interface Message {
   id: string;
@@ -323,201 +324,199 @@ export function Chatbot() {
       </Dialog>
     );
   };
+  
+  const renderSidebarContent = () => (
+    <>
+      <SheetHeader>
+        <SheetTitle>Dashboard</SheetTitle>
+        <SheetDescription>Dokumentasi dan informasi proyek.</SheetDescription>
+      </SheetHeader>
+      <ScrollArea className="flex-1 p-4">
+        <Accordion type="single" collapsible className="w-full">
+        <AccordionItem value="item-1" className="border-none">
+            <AccordionTrigger className="text-base font-semibold hover:no-underline">
+              Maskuh Learning
+            </AccordionTrigger>
+            <AccordionContent>
+              <Card>
+                <CardContent className="p-4 space-y-4">
+                  <div onClick={() => { setActiveDialog('learning-getting-started'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                    <GraduationCap className="h-5 w-5 text-muted-foreground" />
+                    <span className="text-sm">Getting Started</span>
+                  </div>
+                  <div onClick={() => { setActiveDialog('learning-basic-concepts'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                    <FileQuestion className="h-5 w-5 text-muted-foreground" />
+                    <span className="text-sm">Basic Concepts</span>
+                  </div>
+                  <div onClick={() => { setActiveDialog('learning-tutorials'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                    <Video className="h-5 w-5 text-muted-foreground" />
+                    <span className="text-sm">Tutorials</span>
+                  </div>
+                  <div onClick={() => { setActiveDialog('learning-case-studies'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                    <BookOpen className="h-5 w-5 text-muted-foreground" />
+                    <span className="text-sm">Case Studies</span>
+                  </div>
+                  <div onClick={() => { setActiveDialog('learning-tips-tricks'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                    <Star className="h-5 w-5 text-muted-foreground" />
+                    <span className="text-sm">Tips & Tricks</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-2" className="border-none">
+            <AccordionTrigger className="text-base font-semibold hover:no-underline">
+              Maskuh Documentation
+            </AccordionTrigger>
+            <AccordionContent>
+              <Card>
+                <CardContent className="p-4 space-y-4">
+                  <div onClick={() => { setActiveDialog('app-menu'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                    <Menu className="h-5 w-5 text-muted-foreground" />
+                    <span className="text-sm">APP MENU</span>
+                  </div>
+                  <div onClick={() => { setActiveDialog('structure'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                    <FolderKanban className="h-5 w-5 text-muted-foreground" />
+                    <span className="text-sm">STRUCTURE</span>
+                  </div>
+                  <div onClick={() => { setActiveDialog('version'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                    <GitBranch className="h-5 w-5 text-muted-foreground" />
+                    <span className="text-sm">Maskuh Version</span>
+                  </div>
+                  <div onClick={() => { setActiveDialog('api-docs'); setIsSidebarOpen(false); }} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
+                    <BookText className="h-5 w-5 text-muted-foreground" />
+                    <span className="text-sm">API Route Documentation</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </ScrollArea>
+    </>
+  );
 
   return (
-    <div className="flex w-full h-full bg-white dark:bg-gray-800 shadow-2xl rounded-lg overflow-hidden">
+    <div className="flex flex-col w-full h-screen bg-white dark:bg-gray-800">
       {renderDialog()}
-      {/* Kolom Sidebar Internal */}
-      <div
-        className={cn(
-          "border-r dark:border-gray-700 flex flex-col transition-all duration-300 ease-in-out",
-          isSidebarOpen ? "w-1/3" : "w-0 p-0 border-none"
-        )}
-      >
-        <div className={cn("p-4 border-b dark:border-gray-700 whitespace-nowrap overflow-hidden", !isSidebarOpen && "hidden")}>
-          <h2 className="text-xl font-semibold">Dashboard</h2>
+      
+      <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
+        <SheetContent side="left" className="w-[350px] sm:w-[400px] flex flex-col">
+            {renderSidebarContent()}
+        </SheetContent>
+      </Sheet>
+
+      <div className="p-4 border-b dark:border-gray-700 flex items-center gap-4">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setIsSidebarOpen(true)}
+        >
+          <PanelLeftOpen />
+          <span className="sr-only">Toggle Sidebar</span>
+        </Button>
+
+        <Avatar className="h-12 w-12">
+          <AvatarImage src="https://cdn-icons-png.flaticon.com/128/3273/3273828.png" alt="Chat.Maskuh" />
+          <AvatarFallback>CM</AvatarFallback>
+        </Avatar>
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">
+              Chat.Maskuh
+          </h2>
+          <p className="text-sm text-muted-foreground">Powered by Arlan Saputra</p>
         </div>
-        <ScrollArea className={cn("flex-1 p-4", !isSidebarOpen && "hidden")}>
-          <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="item-1" className="border-none">
-              <AccordionTrigger className="text-base font-semibold hover:no-underline">
-                Maskuh Learning
-              </AccordionTrigger>
-              <AccordionContent>
-                <Card>
-                  <CardContent className="p-4 space-y-4">
-                    <div onClick={() => setActiveDialog('learning-getting-started')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                      <GraduationCap className="h-5 w-5 text-muted-foreground" />
-                      <span className="text-sm">Getting Started</span>
-                    </div>
-                    <div onClick={() => setActiveDialog('learning-basic-concepts')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                      <FileQuestion className="h-5 w-5 text-muted-foreground" />
-                      <span className="text-sm">Basic Concepts</span>
-                    </div>
-                    <div onClick={() => setActiveDialog('learning-tutorials')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                      <Video className="h-5 w-5 text-muted-foreground" />
-                      <span className="text-sm">Tutorials</span>
-                    </div>
-                    <div onClick={() => setActiveDialog('learning-case-studies')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                      <BookOpen className="h-5 w-5 text-muted-foreground" />
-                      <span className="text-sm">Case Studies</span>
-                    </div>
-                    <div onClick={() => setActiveDialog('learning-tips-tricks')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                      <Star className="h-5 w-5 text-muted-foreground" />
-                      <span className="text-sm">Tips & Tricks</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-2" className="border-none">
-              <AccordionTrigger className="text-base font-semibold hover:no-underline">
-                Maskuh Documentation
-              </AccordionTrigger>
-              <AccordionContent>
-                <Card>
-                  <CardContent className="p-4 space-y-4">
-                    <div onClick={() => setActiveDialog('app-menu')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                      <Menu className="h-5 w-5 text-muted-foreground" />
-                      <span className="text-sm">APP MENU</span>
-                    </div>
-                    <div onClick={() => setActiveDialog('structure')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                      <FolderKanban className="h-5 w-5 text-muted-foreground" />
-                      <span className="text-sm">STRUCTURE</span>
-                    </div>
-                    <div onClick={() => setActiveDialog('version')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                      <GitBranch className="h-5 w-5 text-muted-foreground" />
-                      <span className="text-sm">Maskuh Version</span>
-                    </div>
-                    <div onClick={() => setActiveDialog('api-docs')} className="flex items-center gap-3 cursor-pointer hover:bg-muted p-2 rounded-md">
-                      <BookText className="h-5 w-5 text-muted-foreground" />
-                      <span className="text-sm">API Route Documentation</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </ScrollArea>
       </div>
 
-      {/* Kolom Chat Utama */}
-      <div className={cn("flex flex-col transition-all duration-300 ease-in-out", isSidebarOpen ? "w-2/3" : "w-full")}>
-        <div className="p-8 border-b dark:border-gray-700 flex items-center gap-6 relative">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="absolute left-2 top-1/2 -translate-y-1/2"
-          >
-            {isSidebarOpen ? <PanelLeftClose /> : <PanelLeftOpen />}
-            <span className="sr-only">Toggle Sidebar</span>
-          </Button>
-
-          <Avatar className="h-16 w-16 ml-12">
-            <AvatarImage src="https://cdn-icons-png.flaticon.com/128/3273/3273828.png" alt="Chat.Maskuh" />
-            <AvatarFallback>CM</AvatarFallback>
-          </Avatar>
-          <div>
-            <h2 className="text-3xl font-bold tracking-tight">
-                Chat.Maskuh
-            </h2>
-            <p className="text-base text-muted-foreground mt-1">Powered by Arlan Saputra</p>
-          </div>
+      <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
+        <div className="space-y-4 max-w-4xl mx-auto w-full">
+        {messages.map((message) => (
+            <div
+            key={message.id}
+            className={`flex items-end gap-2 ${
+                message.sender === "user" ? "justify-end" : ""
+            }`}
+            >
+            {message.sender === "bot" && (
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src="https://cdn-icons-png.flaticon.com/128/3273/3273828.png" alt="Chat.Maskuh" />
+                  <AvatarFallback>CM</AvatarFallback>
+                </Avatar>
+            )}
+            <div
+                className={`max-w-xs md:max-w-md lg:max-w-2xl rounded-lg px-4 py-2 text-sm ${
+                message.sender === "user"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted"
+                }`}
+            >
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    code({ node, className, children, ...props }) {
+                      const match = /language-(\w+)/.exec(className || '')
+                      return match ? (
+                        <CodeBlock
+                          language={match[1]}
+                          value={String(children).replace(/\n$/, '')}
+                        />
+                      ) : (
+                        <code className={className} {...props}>
+                          {children}
+                        </code>
+                      )
+                    },
+                  }}
+                >
+                  {message.text}
+                </ReactMarkdown>
+            </div>
+            {message.sender === "user" && (
+                <Avatar className="h-8 w-8">
+                    <AvatarImage src="https://cdn-icons-png.flaticon.com/128/1702/1702478.png" alt="User" />
+                    <AvatarFallback>
+                        <UserRound />
+                    </AvatarFallback>
+                </Avatar>
+            )}
+            </div>
+        ))}
+        {isLoading && (
+            <div className="flex items-end gap-2">
+            <Avatar className="h-8 w-8">
+              <AvatarImage src="https://cdn-icons-png.flaticon.com/128/3273/3273828.png" alt="Chat.Maskuh" />
+              <AvatarFallback>CM</AvatarFallback>
+            </Avatar>
+            <div className="max-w-xs md:max-w-md lg:max-w-lg rounded-lg px-4 py-2 bg-muted">
+                <Loader2 className="h-5 w-5 animate-spin" />
+            </div>
+            </div>
+        )}
         </div>
+      </ScrollArea>
 
-        <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
-          <div className="space-y-4">
-          {messages.map((message) => (
-              <div
-              key={message.id}
-              className={`flex items-end gap-2 ${
-                  message.sender === "user" ? "justify-end" : ""
-              }`}
-              >
-              {message.sender === "bot" && (
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src="https://cdn-icons-png.flaticon.com/128/3273/3273828.png" alt="Chat.Maskuh" />
-                    <AvatarFallback>CM</AvatarFallback>
-                  </Avatar>
-              )}
-              <div
-                  className={`max-w-xs md:max-w-md lg:max-w-lg rounded-lg px-4 py-2 text-sm ${
-                  message.sender === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted"
-                  }`}
-              >
-                  <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    components={{
-                      code({ node, className, children, ...props }) {
-                        const match = /language-(\w+)/.exec(className || '')
-                        return match ? (
-                          <CodeBlock
-                            language={match[1]}
-                            value={String(children).replace(/\n$/, '')}
-                          />
-                        ) : (
-                          <code className={className} {...props}>
-                            {children}
-                          </code>
-                        )
-                      },
-                    }}
-                  >
-                    {message.text}
-                  </ReactMarkdown>
-              </div>
-              {message.sender === "user" && (
-                  <Avatar className="h-8 w-8">
-                      <AvatarImage src="https://cdn-icons-png.flaticon.com/128/1702/1702478.png" alt="User" />
-                      <AvatarFallback>
-                          <UserRound />
-                      </AvatarFallback>
-                  </Avatar>
-              )}
-              </div>
-          ))}
-          {isLoading && (
-              <div className="flex items-end gap-2">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src="https://cdn-icons-png.flaticon.com/128/3273/3273828.png" alt="Chat.Maskuh" />
-                <AvatarFallback>CM</AvatarFallback>
-              </Avatar>
-              <div className="max-w-xs md:max-w-md lg:max-w-lg rounded-lg px-4 py-2 bg-muted">
-                  <Loader2 className="h-5 w-5 animate-spin" />
-              </div>
-              </div>
-          )}
-          </div>
-        </ScrollArea>
-
-        <div className="p-4 border-t dark:border-gray-700">
-          <div className="flex items-center gap-2">
-            <Input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && !isLoading && handleSend()}
-              placeholder="Ketik pesan Anda..."
-              className="flex-1"
-              disabled={isLoading}
-            />
-            <Button onClick={handleSend} disabled={isLoading} size="icon">
-              {isLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Send className="h-4 w-4" />
-              )}
-              <span className="sr-only">Kirim</span>
-            </Button>
-          </div>
+      <div className="p-4 border-t dark:border-gray-700 bg-background">
+        <div className="flex items-center gap-2 max-w-4xl mx-auto w-full">
+          <Input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && !isLoading && handleSend()}
+            placeholder="Ketik pesan Anda..."
+            className="flex-1"
+            disabled={isLoading}
+          />
+          <Button onClick={handleSend} disabled={isLoading} size="icon">
+            {isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Send className="h-4 w-4" />
+            )}
+            <span className="sr-only">Kirim</span>
+          </Button>
         </div>
       </div>
     </div>
   );
 }
-
-    
 
     
