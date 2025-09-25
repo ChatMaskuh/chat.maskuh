@@ -14,7 +14,7 @@ const ChatOutputSchema = z.string();
 
 export async function chat(message: string): Promise<string> {
     // Server-side check for the API key
-    if (!process.env.HUGgingface_API_KEY || !process.env.HUGGINGFACE_API_URL) {
+    if (!process.env.HUGGINGFACE_API_KEY || !process.env.HUGGINGFACE_API_URL) {
         console.error("HUGGINGFACE_API_KEY or HUGGINGFACE_API_URL is not set in the environment variables.");
         // Return a more specific error message to the client
         return "Kesalahan Konfigurasi Server: Kunci atau URL API untuk layanan Hugging Face belum diatur. Silakan periksa pengaturan environment di server deployment Anda.";
@@ -26,7 +26,7 @@ export async function chat(message: string): Promise<string> {
     } catch (e: any) {
         console.error("Error executing chatFlow:", e);
         // Return a user-friendly error message.
-        return `Maaf, terjadi kendala saat berkomunikasi dengan layanan AI: ${e.message}`;
+        return `Maaf, terjadi kendala saat berkomunikasi dengan layanan AI. Silakan coba beberapa saat lagi.`;
     }
 }
 
