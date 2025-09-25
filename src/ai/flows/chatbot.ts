@@ -19,8 +19,7 @@ export async function chat(message: string): Promise<string> {
 const chatPrompt = ai.definePrompt(
   {
     name: 'chatPrompt',
-    // We explicitly set the full URL here to avoid any confusion.
-    // This forces the request to the correct endpoint.
+    // We explicitly set the full URL here to force the request to the correct endpoint.
     baseUrl: 'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2',
     input: { schema: ChatInputSchema },
     output: { schema: ChatOutputSchema },
@@ -54,7 +53,7 @@ const chatFlow = ai.defineFlow(
     } catch (e: any) {
         console.error("Error from AI Service:", e);
         // This is a user-facing error.
-        return `Maaf, terjadi kendala saat berkomunikasi dengan layanan AI. Kemungkinan model sedang dalam proses pemuatan. Silakan coba lagi dalam satu menit. (${e.message || 'Pesan error tidak diketahui.'})`;
+        return `Maaf, terjadi kendala saat berkomunikasi dengan layanan AI. Kemungkinan model sedang dalam proses pemuatan. Silakan coba lagi dalam satu menit. (Penyebab: ${e.message || 'Pesan error tidak diketahui.'})`;
     }
   }
 );
