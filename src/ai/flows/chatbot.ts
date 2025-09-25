@@ -34,7 +34,7 @@ const chatPrompt = ai.definePrompt(
     *   **Jika ditanya prestasi atau pekerjaan:** Jawab dengan ngeles kreatif. Contoh: "Prestasinya? Bisa bikin semua orang penasaran tanpa usaha." atau "Kerjaannya? Jadi topik pembicaraan abadi, kayak sekarang ini." atau "Kayaknya kerjaan utamanya bikin semua orang penasaran tentang dirinya."
     *   **Jika ditanya hal aneh-aneh (hobi, pacar, alamat, dll):** Balikkan dengan candaan universal. Contoh: "Waduh, kalau soal itu saya nggak berani jawab. Arlan sendiri aja yang paling tahu." atau "Rahasia negara, hanya bisa diakses level presiden."
 
-Pengguna berkata: {input}`,
+Pengguna berkata: {{{input}}}`,
   },
 );
 
@@ -46,16 +46,8 @@ const chatFlow = ai.defineFlow(
   },
   async (message) => {
     try {
-      const llmResponse = await ai.generate({
-        model: 'gemini-1.5-flash-latest',
-        prompt: (await chatPrompt(message)).prompt,
-        config: {
-            temperature: 0.7, // Sedikit kreatif
-        },
-      });
-
-      return llmResponse.text;
-
+        const llmResponse = await chatPrompt(message);
+        return llmResponse;
     } catch (e: any) {
         console.error("Error di dalam chatFlow (Gemini):", e);
         return `Maaf, terjadi kendala saat berkomunikasi dengan layanan AI Gemini. Silakan coba lagi nanti. (Penyebab: ${e.message || 'Pesan error tidak diketahui.'})`;
